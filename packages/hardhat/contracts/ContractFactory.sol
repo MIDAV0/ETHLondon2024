@@ -5,8 +5,8 @@ import "./StakingContract.sol";
 
 contract ContractFactory {
 
-    uint256 constant public MIN_HOURS = 24;
-    uint256 constant public MAX_HOURS = 720;
+    uint256 constant public MIN_HOURS = 24 ether;
+    uint256 constant public MAX_HOURS = 720 ether;
 
     struct FrelancerInfo {
         uint256 id;

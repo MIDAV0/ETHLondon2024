@@ -50,6 +50,7 @@ contract StakingContract is Ownable {
    mapping (uint256 => Dispute) public disputes;
 
    ERC20Token public _ERC20Token;
+   address public erc20TokenAddress;
 
    constructor (
       address _disputeAdmin, // address of the dispute admin
@@ -61,6 +62,7 @@ contract StakingContract is Ownable {
       disputeAdmin = _disputeAdmin;
       // Calculate t
       _ERC20Token = new ERC20Token(address(this), name, symbol, initialSupplyOfShares);
+      erc20TokenAddress = address(_ERC20Token);
       // Add freelancers stake
    }
 
@@ -68,8 +70,9 @@ contract StakingContract is Ownable {
    /// @dev Function to create task for the freelancer. Client also has to stake some amount of ETH equal to the shares value.
    function createTask(uint256 duration, uint256 _shares) payable public {
       // Check that frelancer's stake is more or equal to 1 share value
-      require(frelancerStake >= 1, "Freelancer's stake is less than 1 share value");
-      require(msg.value == 1, "Client stake is not equal to the shares value");
+      require(frelancerStake >= 1 ether, "Freelancer's stake is less than 1 share value");
+      require(msg.value == 1 ether, "Client stake is not equal to the shares value");
+      require(_ERC20Token.balanceOf(msg.sender) >= 1 ether, "Insufficient shares");
 
       taskCounter++;
 
@@ -78,7 +81,7 @@ contract StakingContract is Ownable {
          startTime: 0,
          duration: duration + BUFFER_PERIOD,
          shares: _shares,
-         stakeAmount: 1,
+         stakeAmount: 1 ether,
          status: TaskStatus.NOT_STARTED,
          client: msg.sender
       });
@@ -200,6 +203,13 @@ contract StakingContract is Ownable {
       disputes[taskId].isResolved = true;
    }
 
+   function getSomeShares(uint256 amount) public {
+      _ERC20Token.transfer(msg.sender, amount);
+   }
 
-   receive() external payable {}
+   receive() external payable {
+      if (msg.sender == owner()) {
+         frelancerStake += msg.value;
+      }
+   }
 }

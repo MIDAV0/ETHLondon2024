@@ -36,9 +36,18 @@ describe("ContractFactory", function () {
       const stakeAmount = BigInt(10 ** 18);
       await contractFactory
         .connect(freelancer)
-        .createContract(name, description, tokenName, tokenSymbol, numberOfShares, stakeAmount, disputeAdmin.address, {
-          value: BigInt(10 ** 18),
-        });
+        .createContract(
+          name,
+          description,
+          tokenName,
+          tokenSymbol,
+          BigInt(numberOfShares * 10 ** 18),
+          stakeAmount,
+          disputeAdmin.address,
+          {
+            value: BigInt(10 ** 18),
+          },
+        );
       expect(await contractFactory.getFreelancerCount()).to.equal(1);
     });
   });
