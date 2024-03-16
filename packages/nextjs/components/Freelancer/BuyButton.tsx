@@ -4,7 +4,7 @@ import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 
-export const BuyButton = ({ contractAddress }: { contractAddress: string }) => {
+export const BuyButton = ({ contractAddress, shares, price }: { contractAddress: string, shares: bigint, price: bigint }) => {
   const {
     write: buy,
     isError,
@@ -29,7 +29,7 @@ export const BuyButton = ({ contractAddress }: { contractAddress: string }) => {
       <Button
         className="bg-blue-500 text-white p-2 rounded-md"
         onClick={() => {
-          buy({ args: [BigInt(10 ** 18)] });
+          buy({ args: [shares], value: price });
         }}
         disabled={isLoading}
       >

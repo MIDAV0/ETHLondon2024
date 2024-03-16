@@ -2,11 +2,15 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { Input } from "../ui/input";
+import { formatUnits, parseEther } from "viem";
+import { useContractRead } from "wagmi";
 import { AskJob } from "~~/components/Freelancer/AskJob";
 import { BuyButton } from "~~/components/Freelancer/BuyButton";
 import { SellButton } from "~~/components/Freelancer/SellButton";
 import { Badge } from "~~/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~~/components/ui/card";
+import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 import useStakingContract from "~~/hooks/useStakingContract";
 
 export const FreeLancerCard = ({
@@ -22,11 +26,31 @@ export const FreeLancerCard = ({
 }) => {
   const { sharePrice, tokenAddress } = useStakingContract({ contractAddress: data.stakingContractAddress });
 
+  const [tradeAmount, setTradeAmount] = useState<number>(0);
+
   const sliceOwner = useCallback((owner: `0x${string}`) => `${owner.slice(0, 6)}...${owner.slice(-4)}`, []);
 
   const sliceArTxId = useCallback((arTxId: string) => `${arTxId.slice(0, 6)}...${arTxId.slice(-4)}`, []);
 
   const [isVerfied, setIsVerfied] = useState<boolean>(false);
+
+  const { data: getBuyPriceData } = useContractRead({
+    address: data.stakingContractAddress,
+    abi: STAKING_CONTRACT_ABI,
+    functionName: "getBuyPrice",
+    watch: true, // This tells wagmi to re-fetch when changes are detected
+    args: [parseEther(tradeAmount.toString())], // Pass jobPrice as an argument
+    enabled: tradeAmount !== 0,
+  }) as { data: bigint | undefined };
+
+  const { data: getSellPriceData } = useContractRead({
+    address: data.stakingContractAddress,
+    abi: STAKING_CONTRACT_ABI,
+    functionName: "getSellPrice",
+    watch: true, // This tells wagmi to re-fetch when changes are detected
+    args: [parseEther(tradeAmount.toString())], // Pass jobPrice as an argument
+    enabled: tradeAmount !== 0,
+  }) as { data: bigint | undefined };
 
   const addr = "0x123";
   useEffect(() => {
@@ -67,9 +91,37 @@ export const FreeLancerCard = ({
           <div className="text-lg">$0.002</div>
           <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
         </div>
-        <div className="flex gap-x-2">
-          <BuyButton contractAddress={data.stakingContractAddress} />
-          <SellButton contractAddress={data.stakingContractAddress} />
+        <div className="flex flex-row space-x-3">
+          <div className="flex flex-col justify-between">
+            <Input
+              type="number"
+              placeholder="Shares"
+              value={tradeAmount}
+              onChange={e => setTradeAmount(e.target.value)}
+              min={0}
+              step=".01"
+            />
+            <div className="flex flex-row justify-between">
+              <BuyButton
+                contractAddress={data.stakingContractAddress}
+                shares={parseEther(tradeAmount.toString())}
+                price={getBuyPriceData || BigInt(0)}
+              />
+              <SellButton
+                contractAddress={data.stakingContractAddress}
+                shares={parseEther(tradeAmount.toString())}
+                price={getBuyPriceData || BigInt(0)}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col justify-between space-y-2">
+            <div className="p-2 border-2 border-green-500 rounded-lg">
+              <p>Pay {getBuyPriceData ? formatUnits(getBuyPriceData, 18) : 0} ETH</p>
+            </div>
+            <div className="p-2 border-2 border-red-500 rounded-lg">
+              <p>Receive {getSellPriceData ? formatUnits(getSellPriceData, 18) : 0} ETH</p>
+            </div>
+          </div>
         </div>
       </CardFooter>
     </Card>
