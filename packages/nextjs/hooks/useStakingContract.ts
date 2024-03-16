@@ -10,6 +10,8 @@ type TaskData = {
   stakeAmount: number;
   status: number;
   client: string;
+  title: string;
+  description: string;
 };
 
 export const useStakingContract = ({ contractAddress }: { contractAddress: string }) => {

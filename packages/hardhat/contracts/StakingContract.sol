@@ -44,6 +44,8 @@ contract StakingContract is Ownable {
 		uint256 stakeAmount;
 		TaskStatus status;
 		address client;
+		string title;
+		string description;
 	}
 
 	struct Dispute {
@@ -87,7 +89,12 @@ contract StakingContract is Ownable {
 	/// @dev Function to create task for the freelancer. Client also has to stake some amount of ETH equal to the shares value.
 	/// @param duration The duration of the task in hours
 	/// @param _shares The amount of shares the client wants to stake.
-	function createTask(uint256 duration, uint256 _shares) public payable {
+	function createTask(
+		uint256 duration,
+		uint256 _shares,
+		string memory title,
+		string memory description
+	) public payable {
 		// Check that frelancer's stake is more or equal to 1 share value
 		uint256 sharesPrice = getBuyPrice(_shares);
 		require(
@@ -112,7 +119,9 @@ contract StakingContract is Ownable {
 			shares: _shares,
 			stakeAmount: sharesPrice,
 			status: TaskStatus.NOT_STARTED,
-			client: msg.sender
+			client: msg.sender,
+			title: title,
+			description: description
 		});
 
 		// Client transfers the int amount of shares to the contract
