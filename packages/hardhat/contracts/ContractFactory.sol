@@ -17,6 +17,7 @@ contract ContractFactory {
 
 	uint256 public idCounter;
 	FreelancerInfo[] public freelancers;
+	mapping (address => FreelancerInfo) public freelancerInfoMapping;
 
 	function createContract(
 		string memory name,
@@ -56,6 +57,7 @@ contract ContractFactory {
 				msg.sender
 			)
 		);
+		freelancerInfoMapping[msg.sender] = freelancers[freelancers.length - 1];
 	}
 
 	function getFreelancers() public view returns (FreelancerInfo[] memory) {
