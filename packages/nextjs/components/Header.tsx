@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 type HeaderMenuLink = {
@@ -58,7 +59,9 @@ export const Header = () => {
       <div className="items-center">
         <HeaderMenuLinks />
       </div>
-      <div className="mr-4">
+
+      <div className="flex gap-x-2 mr-4">
+        <Button>Create +</Button>
         <ConnectButton />
       </div>
     </div>

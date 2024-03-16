@@ -8,9 +8,10 @@ export const TotalNumFreelancer = () => {
     functionName: "getFreelancerCount",
   });
 
-  if (isFetching) {
-    return <div>loading...</div>;
-  }
-
-  return <div>Total Number: {totalnumber?.toString()}</div>;
+  return (
+    <div className="w-[200px]">
+      No. of Freelancers:
+      {isFetching ? <div>Loading....</div> : <div>{totalnumber?.toString()}</div>}
+    </div>
+  );
 };
