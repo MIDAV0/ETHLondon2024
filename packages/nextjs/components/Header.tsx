@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RegisterHuman } from "./CreateCredential/RegisterHuman";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 type HeaderMenuLink = {
   label: string;
@@ -54,6 +55,8 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
+  const { address } = useAccount();
+
   return (
     <div className="sticky lg:static top-0 bg-base-100 min-h-0 flex justify-between items-center align-middle z-20 shadow-md shadow-secondary p-2 m-5">
       <div className="items-center">
@@ -61,7 +64,7 @@ export const Header = () => {
       </div>
 
       <div className="flex gap-x-2 mr-4">
-        <RegisterHuman />
+        {address && <RegisterHuman />}
         <ConnectButton />
       </div>
     </div>
