@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { NextPage } from "next";
+import WorldCoinProof from "~~/components/WorldCoinProof";
 
 const Home: NextPage = () => {
   return (
