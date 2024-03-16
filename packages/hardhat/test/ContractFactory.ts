@@ -32,7 +32,7 @@ describe("ContractFactory", function () {
       const description = "Freelancer 1 description";
       const tokenName = "Freelancer 1 Token";
       const tokenSymbol = "F1T";
-      const numberOfShares = 24;
+      const numberOfShares = 50;
       const stakeAmount = BigInt(10 ** 18);
       await contractFactory
         .connect(freelancer)
@@ -41,7 +41,7 @@ describe("ContractFactory", function () {
           description,
           tokenName,
           tokenSymbol,
-          BigInt(numberOfShares * 10 ** 18),
+          BigInt(numberOfShares),
           stakeAmount,
           disputeAdmin.address,
           {

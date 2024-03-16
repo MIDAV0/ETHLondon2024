@@ -4,8 +4,8 @@ pragma solidity >=0.8.0 <0.9.0;
 import "./StakingContract.sol";
 
 contract ContractFactory {
-	uint256 public constant MIN_HOURS = 24 ether;
-	uint256 public constant MAX_HOURS = 720 ether;
+	uint256 public constant MIN_HOURS = 24;
+	uint256 public constant MAX_HOURS = 720;
 
 	struct FreelancerInfo {
 		uint256 id;
@@ -23,7 +23,6 @@ contract ContractFactory {
 		string memory description,
 		string memory tokenName,
 		string memory tokenSymbol,
-		// uint256 stakingAmount,
 		uint256 numberOfShares,
 		uint256 stakeAmount,
 		address _disputeAdmin
@@ -33,11 +32,12 @@ contract ContractFactory {
 			numberOfShares <= MAX_HOURS && numberOfShares >= MIN_HOURS,
 			"Invalid number of shares. Should be within 24 and 720 hours"
 		);
-		uint256 hourlyRate = (stakeAmount * 1 ether) / numberOfShares;
+		uint256 hourlyRateForCurve = (numberOfShares * 1 ether * 1 ether) / stakeAmount;
+		// uint256 hourlyRate = (stakeAmount * 1 ether) / numberOfShares;
 		StakingContract stakingContract = new StakingContract(
 			_disputeAdmin,
 			numberOfShares,
-			hourlyRate,
+			hourlyRateForCurve,
 			tokenName,
 			tokenSymbol
 		);
