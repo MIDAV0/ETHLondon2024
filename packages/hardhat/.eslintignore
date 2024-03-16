@@ -2,6 +2,9 @@
 artifacts
 cache
 contracts
+deploy
+scripts
+test
 node_modules/
 typechain-types
 # files
