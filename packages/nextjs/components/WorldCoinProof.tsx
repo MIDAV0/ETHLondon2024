@@ -64,7 +64,7 @@ const WorldCoinProof = ({ userAddress }: { userAddress: string }) => {
         Please verify your identity with World ID to proof you are human.
       </div>
       <IDKitWidget
-        action={process.env.NEXT_PUBLIC_WLD_ACTION!}
+        action={process.env.NEXT_PUBLIC_WLD_ACTION}
         app_id={process.env.NEXT_PUBLIC_WLD_APP_ID as `app_${string}`}
         onSuccess={onSuccess}
         handleVerify={handleProof}
