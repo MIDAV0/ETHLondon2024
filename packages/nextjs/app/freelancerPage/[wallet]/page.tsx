@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import type { NextPage } from "next";
+import { MainPage } from "~~/components/FreelancerPage/MainPage";
 
 const FreelancerPage: NextPage = () => {
   return (
     <>
       <div className="bg-white">
-        Freelancer
+        <MainPage />
       </div>
     </>
   );
