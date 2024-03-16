@@ -4,12 +4,13 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { parseEther } from "viem/utils";
-import { useContractWrite } from "wagmi";
+import { useContractWrite, useAccount } from "wagmi";
 import { z } from "zod";
 import { Button } from "~~/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~~/components/ui/form";
 import { Input } from "~~/components/ui/input";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
+import { parse } from "path";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -33,6 +34,10 @@ const formSchema = z.object({
 });
 
 export function ProfileForm() {
+  const [tokenShares, setTokenShares] = useState(24);
+  const [stakesAmount, setStakesAmount] = useState(0);
+  const { address } = useAccount();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,18 +50,19 @@ export function ProfileForm() {
     },
   });
   const { data, isLoading, isSuccess, write } = useContractWrite({
-    address: "0xBfec823dF7352Cf08388877647c0E89A2b242F9D",
+    address: "0xfbeD2EF163dAC5EEbee187051E352Bbee135c8C2",
     abi: CONTRACT_FACTORY_ABI,
     functionName: "createContract",
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!address) return;
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     const processedValues = {
       ...values,
-      numberOfShares: BigInt(values.numberOfShares),
-      stakesAmount: parseEther(values.stakesAmount),
+      numberOfShares: BigInt(tokenShares),
+      stakesAmount: parseEther(stakesAmount.toString()),
     };
     write({
       args: [
@@ -66,9 +72,9 @@ export function ProfileForm() {
         processedValues.tokenSymbol,
         processedValues.numberOfShares,
         processedValues.stakesAmount,
-        "0xcC2042a7c7997a04e26389B9689f2AE766342732",
+        "0xA97a53640d072642B2905da0Be798Cdd03ecEa67",
       ],
-      value: parseEther(values.stakesAmount),
+      value: processedValues.stakesAmount,
     });
 
     console.log(processedValues);
@@ -81,9 +87,6 @@ export function ProfileForm() {
   const toScan = (hash: string) => {
     return `https://sepolia.basescan.org/address/${hash}`;
   };
-
-  const [tokenShares, setTokenShares] = useState(24);
-  const [stakesAmount, setStakesAmount] = useState(0);
 
   return (
     <Form {...form}>
@@ -178,6 +181,7 @@ export function ProfileForm() {
                     onChange={e => {
                       setStakesAmount(Number(e.target.value));
                     }}
+                    step=".01"
                     value={stakesAmount}
                     min={0}
                   />

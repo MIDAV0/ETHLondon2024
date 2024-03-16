@@ -200,6 +200,16 @@ export const STAKING_CONTRACT_ABI = [
         name: "_shares",
         type: "uint256",
       },
+      {
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "description",
+        type: "string",
+      },
     ],
     name: "createTask",
     outputs: [],
@@ -504,6 +514,16 @@ export const STAKING_CONTRACT_ABI = [
         internalType: "address",
         name: "client",
         type: "address",
+      },
+      {
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "description",
+        type: "string",
       },
     ],
     stateMutability: "view",
