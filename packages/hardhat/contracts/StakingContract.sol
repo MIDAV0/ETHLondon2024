@@ -16,8 +16,7 @@ contract StakingContract is Ownable {
 
 	address public disputeAdmin;
 
-	mapping(address => mapping(address => uint256)) public sharesBalance;
-	mapping(address => uint256) public sharesSupply;
+	uint256 public sharesSupply;
 
 	event Trade(
 		address trader,
@@ -71,33 +70,36 @@ contract StakingContract is Ownable {
 		string memory name,
 		string memory symbol
 	) {
-		_transferOwnership(msg.sender);
+		_transferOwnership(tx.origin);
 		disputeAdmin = _disputeAdmin;
 		// Calculate t
 		_EmployeeToken = new EmployeeToken(
 			address(this),
 			name,
 			symbol,
-			initialSupplyOfShares
+			initialSupplyOfShares * 1 ether
 		);
 		erc20TokenAddress = address(_EmployeeToken);
 		hourlyRate = _hourlyRate;
-		// Add freelancers stake
+		buyShares(1 ether);
 	}
 
 	/// @dev Function to create task for the freelancer. Client also has to stake some amount of ETH equal to the shares value.
+	/// @param duration The duration of the task in hours
+	/// @param _shares The amount of shares the client wants to stake.
 	function createTask(uint256 duration, uint256 _shares) public payable {
 		// Check that frelancer's stake is more or equal to 1 share value
+		uint256 sharesPrice = getBuyPrice(_shares);
 		require(
-			freelancerStake >= 1 ether,
+			freelancerStake >= sharesPrice,
 			"Freelancer's stake is less than 1 share value"
 		);
 		require(
-			msg.value == 1 ether,
+			msg.value == sharesPrice,
 			"Client stake is not equal to the shares value"
 		);
 		require(
-			_EmployeeToken.balanceOf(msg.sender) >= 1 ether,
+			_EmployeeToken.balanceOf(msg.sender) >= _shares,
 			"Insufficient shares"
 		);
 
@@ -108,7 +110,7 @@ contract StakingContract is Ownable {
 			startTime: 0,
 			duration: duration + BUFFER_PERIOD,
 			shares: _shares,
-			stakeAmount: 1 ether,
+			stakeAmount: sharesPrice,
 			status: TaskStatus.NOT_STARTED,
 			client: msg.sender
 		});
@@ -299,47 +301,43 @@ contract StakingContract is Ownable {
 		uint256 supply,
 		uint256 amount
 	) public view returns (uint256) {
+		require(_EmployeeToken.totalSupply() >= supply, "Insufficient supply of shares");
 		uint256 sum1 = supply == 0
 			? 0
-			: ((supply - 1) * (supply) * (2 * (supply - 1) + 1)) / 6;
-		uint256 sum2 = supply == 0 && amount == 1
+			: ((supply - 1 ether) * (supply) * (2 * (supply - 1 ether) + 1 ether)) / 6 ether;
+		uint256 sum2 = supply == 0 && amount == 1 ether
 			? 0
-			: ((supply - 1 + amount) *
+			: ((supply - 1 ether + amount) *
 				(supply + amount) *
-				(2 * (supply - 1 + amount) + 1)) / 6;
+				(2 * (supply - 1 ether + amount) + 1 ether)) / 6 ether;
 		uint256 summation = sum2 - sum1;
-		return (summation * 1 ether) / hourlyRate;
+		return summation / (hourlyRate * 10);
 	}
 
 	function getBuyPrice(
-		address sharesSubject,
 		uint256 amount
 	) public view returns (uint256) {
-		return getPrice(sharesSupply[sharesSubject], amount);
+		return getPrice(sharesSupply, amount);
 	}
 
 	function getSellPrice(
-		address sharesSubject,
 		uint256 amount
 	) public view returns (uint256) {
-		return getPrice(sharesSupply[sharesSubject] - amount, amount);
+		return getPrice(sharesSupply - amount, amount);
 	}
 
-	function buyShares(address sharesSubject, uint256 amount) public payable {
-		uint256 supply = sharesSupply[sharesSubject];
-		require(
-			supply > 0 || sharesSubject == msg.sender,
-			"Only the shares' subject can buy the first share"
-		);
+	function buyShares(uint256 amount) public payable {
+		uint256 supply = sharesSupply;
+		// require(
+		// 	supply > 0 || sharesSubject == address(this),
+		// 	"Only the shares' subject can buy the first share"
+		// );
 		uint256 price = getPrice(supply, amount);
 		require(msg.value >= price, "Insufficient payment");
-		sharesBalance[sharesSubject][msg.sender] =
-			sharesBalance[sharesSubject][msg.sender] +
-			amount;
-		sharesSupply[sharesSubject] = supply + amount;
+		sharesSupply = supply + amount;
 		emit Trade(
 			msg.sender,
-			sharesSubject,
+			address(this),
 			true,
 			amount,
 			price,
@@ -348,21 +346,15 @@ contract StakingContract is Ownable {
 		_EmployeeToken.transfer(msg.sender, amount);
 	}
 
-	function sellShares(address sharesSubject, uint256 amount) public payable {
-		uint256 supply = sharesSupply[sharesSubject];
+	function sellShares(uint256 amount) public payable {
+		uint256 supply = sharesSupply;
 		require(supply > amount, "Cannot sell the last share");
 		uint256 price = getPrice(supply - amount, amount);
-		require(
-			sharesBalance[sharesSubject][msg.sender] >= amount,
-			"Insufficient shares"
-		);
-		sharesBalance[sharesSubject][msg.sender] =
-			sharesBalance[sharesSubject][msg.sender] -
-			amount;
-		sharesSupply[sharesSubject] = supply - amount;
+		require(_EmployeeToken.balanceOf(msg.sender) >= amount, "Insufficient shares");
+		sharesSupply = supply - amount;
 		emit Trade(
 			msg.sender,
-			sharesSubject,
+			address(this),
 			false,
 			amount,
 			price,
@@ -373,12 +365,8 @@ contract StakingContract is Ownable {
 		require(sent, "Failed to send Ether");
 	}
 
-	function getSomeShares(uint256 amount) public {
-		_EmployeeToken.transfer(msg.sender, amount);
-	}
-
 	receive() external payable {
-		if (msg.sender == owner()) {
+		if (tx.origin == owner()) {
 			freelancerStake += msg.value;
 		}
 	}
