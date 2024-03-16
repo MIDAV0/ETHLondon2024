@@ -200,4 +200,6 @@ contract StakingContract is Ownable {
       disputes[taskId].isResolved = true;
    }
 
+
+   receive() external payable {}
 }

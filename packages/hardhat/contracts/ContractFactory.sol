@@ -16,7 +16,7 @@ contract ContractFactory {
         address owner;
     }
 
-    uint256 idCounter;
+    uint256 public idCounter;
     FrelancerInfo[] public freelancers;
 
     function createContract(
@@ -26,17 +26,20 @@ contract ContractFactory {
         string memory tokenSymbol,
         // uint256 stakingAmount,
         uint256 numberOfShares,
-        uint256 stakeAmount
+        uint256 stakeAmount,
+        address _disputeAdmin
     ) payable public {
         require(msg.value == stakeAmount, "Insufficient Stake Amount");
         require(numberOfShares <= MAX_HOURS && numberOfShares >= MIN_HOURS, "Invalid number of shares. Should be within 24 and 720 hours");
         StakingContract stakingContract = new StakingContract(
-            msg.sender,
+            _disputeAdmin,
             numberOfShares,
             tokenName,
             tokenSymbol
         );
-        (bool success, ) = address(stakingContract).call{value: stakeAmount}("");
+        // Transfer the stake amount to the staking contract
+
+        (bool success, ) = payable(address(stakingContract)).call{value: msg.value}("");
         require(success, "Stake transfer failed");
         freelancers.push(FrelancerInfo(idCounter++, name, description, address(stakingContract), msg.sender));
     }
@@ -44,5 +47,7 @@ contract ContractFactory {
     function getFreelancerCount() public view returns (uint) {
         return freelancers.length;
     }
+
+    receive() external payable {}
 
 }
