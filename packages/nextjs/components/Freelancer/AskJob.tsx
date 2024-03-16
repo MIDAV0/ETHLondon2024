@@ -15,9 +15,9 @@ export const AskJob = () => {
   const contractAddress = "0xBfec823dF7352Cf08388877647c0E89A2b242F9D";
 
   const {
-    data: writeData,
-    isLoading: isWriteLoading,
-    isSuccess: isWriteSuccess,
+    // data: writeData,
+    // isLoading: isWriteLoading,
+    // isSuccess: isWriteSuccess,
     write,
   } = useContractWrite({
     address: contractAddress,
@@ -41,6 +41,7 @@ export const AskJob = () => {
   }, [getPriceData]);
 
   const onSubmit = (values: any) => {
+    console.log("values", values);
     write({
       args: [jobPrice, jobDeadline],
     });

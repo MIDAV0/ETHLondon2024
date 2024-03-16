@@ -4,7 +4,6 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { parseEther } from "viem/utils";
-import { useAccount } from "wagmi";
 import { useContractWrite } from "wagmi";
 import { z } from "zod";
 import { Button } from "~~/components/ui/button";
@@ -51,8 +50,6 @@ export function ProfileForm() {
     functionName: "createContract",
   });
 
-  const { address } = useAccount();
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -77,7 +74,6 @@ export function ProfileForm() {
     console.log(processedValues);
   }
 
-
   const sliceAddress = (address: string) => {
     return address.slice(0, 6) + "..." + address.slice(-4);
   };
@@ -88,7 +84,6 @@ export function ProfileForm() {
 
   const [tokenShares, setTokenShares] = useState(24);
   const [stakesAmount, setStakesAmount] = useState(0);
-
 
   return (
     <Form {...form}>
@@ -202,7 +197,7 @@ export function ProfileForm() {
         {data && (
           <div>
             Transaction Hash:
-            <a onClick={toScan(data.hash)}>{sliceAddress(data.hash)}</a>
+            <a onClick={() => toScan(data.hash)}>{sliceAddress(data.hash)}</a>
           </div>
         )}
         {isLoading && <div>Waiting for confirmation...</div>}

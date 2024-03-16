@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~~/components/ui/card";
 import { Label } from "~~/components/ui/label";
@@ -147,7 +146,7 @@ export const MainPage = () => {
         <Card>
           <CardHeader>
             <CardTitle>Account</CardTitle>
-            <CardDescription>Make changes to your account here. Click save when you're done.</CardDescription>
+            <CardDescription>Make changes to your account here. Click save when youre done.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-1">
