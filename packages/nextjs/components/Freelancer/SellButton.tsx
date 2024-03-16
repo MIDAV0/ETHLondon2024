@@ -4,7 +4,7 @@ import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 
-export const SellButton = () => {
+export const SellButton = ({ contractAddress }: { contractAddress: string }) => {
   const {
     write: sell,
     isError,
@@ -12,7 +12,7 @@ export const SellButton = () => {
     isLoading,
   } = useContractWrite({
     abi: STAKING_CONTRACT_ABI,
-    address: "0x1234567890123456789012345678901234567890",
+    address: "contractAddress",
     functionName: "sellShares",
   });
 
@@ -29,7 +29,7 @@ export const SellButton = () => {
       <Button
         className="bg-blue-500 text-white p-2 rounded-md"
         onClick={() => {
-          sell({ args: [BigInt(1)] });
+          sell({ args: [BigInt(10 ** 18)] });
         }}
       >
         {isLoading ? "Selling..." : "Sell"}

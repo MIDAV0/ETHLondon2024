@@ -8,7 +8,6 @@ import { FreeLancerHeader } from "~~/components/Freelancer/FreeLancerHeader";
 export const FreeLancerView = () => {
   const { freelancersData } = useFreelancerFactory();
 
-  console.log(freelancersData);
   return (
     <div className="w-[70%] mx-auto p-2">
       <div>FreeLancer</div>

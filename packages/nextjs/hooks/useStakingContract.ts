@@ -15,12 +15,18 @@ type TaskData = {
 };
 
 export const useStakingContract = ({ contractAddress }: { contractAddress: string }) => {
-  const { data: tasksData } = useContractRead({
+  // const { data: tasksData } = useContractRead({
+  //   address: contractAddress as `0x${string}`,
+  //   abi: STAKING_CONTRACT_ABI,
+  //   functionName: "tasks",
+  //   watch: true,
+  // }) as { data: TaskData[] | undefined };
+
+  const { data: tokenAddress } = useContractRead({
     address: contractAddress as `0x${string}`,
     abi: STAKING_CONTRACT_ABI,
-    functionName: "tasks",
-    watch: true,
-  }) as { data: TaskData[] | undefined };
+    functionName: "erc20TokenAddress",
+  }) as { data: string | undefined };
 
   const { data: sharePrice } = useContractRead({
     address: contractAddress as `0x${string}`,
@@ -30,8 +36,8 @@ export const useStakingContract = ({ contractAddress }: { contractAddress: strin
   }) as { data: bigint };
 
   return {
-    tasksData,
     sharePrice: sharePrice ? formatUnits(sharePrice, 18) : undefined,
+    tokenAddress,
   };
 };
 

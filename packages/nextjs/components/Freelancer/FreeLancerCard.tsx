@@ -20,9 +20,7 @@ export const FreeLancerCard = ({
     owner: string;
   };
 }) => {
-  const { sharePrice } = useStakingContract({ contractAddress: data.stakingContractAddress });
-
-  console.log(sharePrice);
+  const { sharePrice, tokenAddress } = useStakingContract({ contractAddress: data.stakingContractAddress });
 
   const sliceOwner = useCallback((owner: `0x${string}`) => `${owner.slice(0, 6)}...${owner.slice(-4)}`, []);
 
@@ -30,6 +28,7 @@ export const FreeLancerCard = ({
 
   const [isVerfied, setIsVerfied] = useState<boolean>(false);
 
+  const addr = "0x123";
   useEffect(() => {
     // @ts-ignore
     if (data.owner === addr) {
@@ -43,10 +42,12 @@ export const FreeLancerCard = ({
         <CardTitle>
           <div className="flex justify-between">
             <div className="flex flex-row h-7 space-x-3 align-bottom">
-              <div className="align-bottom">{data.name} - {data.owner}</div>
+              <div className="align-bottom">
+                {data.name} - {data.owner}
+              </div>
               <Badge className="bg-primary">Verified</Badge>
             </div>
-            <AskJob />
+            <AskJob contractAddress={data.stakingContractAddress} tokenAddress={tokenAddress || ""} />
           </div>
         </CardTitle>
         <CardDescription>
@@ -67,8 +68,8 @@ export const FreeLancerCard = ({
           <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
         </div>
         <div className="flex gap-x-2">
-          <BuyButton />
-          <SellButton />
+          <BuyButton contractAddress={data.stakingContractAddress} />
+          <SellButton contractAddress={data.stakingContractAddress} />
         </div>
       </CardFooter>
     </Card>
