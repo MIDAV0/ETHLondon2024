@@ -7,11 +7,13 @@ const EmployeeShareContract: DeployFunction = async function (hre: HardhatRuntim
   const { deploy } = deployments;
 
   const { deployer } = await getNamedAccounts();
-  const EmployeeToken = await deployments.get("EmployeeToken");
+
+  const employeeToken = await deployments.get("EmployeeToken");
+  console.log("EmployeeToken address:", employeeToken.address);
 
   const employeeContract = await deploy("EmployeeShares", {
     from: deployer,
-    args: [EmployeeToken],
+    args: [employeeToken.address],
     log: true,
   });
 
@@ -22,4 +24,3 @@ const EmployeeShareContract: DeployFunction = async function (hre: HardhatRuntim
 
 EmployeeShareContract.tags = ["all", "EmployeeShares"];
 export default EmployeeShareContract;
-
