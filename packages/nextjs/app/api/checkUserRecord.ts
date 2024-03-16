@@ -1,18 +1,14 @@
-import { createClient } from '@supabase/supabase-js';
+// checkUserRecord.ts
+import supabase from './supabaseClient';
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Next.js API route
 export default async function checkUserRecord(req, res) {
   const { address } = req.query;
 
   // Query the user's verification status from the Supabase database
   const { data, error } = await supabase
-    .from('users') // replace with your table name
-    .select('verified') // select the 'verified' column
-    .eq('address', address); // where address equals the provided address 
+    .from('users')
+    .select('verified')
+    .eq('address', address);
 
   if (error) {
     console.error('Error reading from database:', error);

@@ -51,10 +51,13 @@ export default function handler(
             "Credential verified! This user's nullifier hash is: ",
             wldResponse.nullifier_hash
           );
-        
-          const error = await createUserRecord(wldResponse.nullifier_hash, true, req.body.address); 
-          if (error) console.error('Error updating database:', error);
-        
+
+        try {
+          await createUserRecord(wldResponse.nullifier_hash, true, req.body.address);
+        } catch (error) {
+          return res.status(500).send({ code: 'error', detail: 'Internal server error' });
+        }
+
           res.status(verifyRes.status).send({
             code: "success",
             detail: "This action verified correctly!",
