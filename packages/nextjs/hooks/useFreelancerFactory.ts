@@ -1,3 +1,5 @@
+"use client";
+
 import { useContractRead } from "wagmi";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
 
@@ -11,14 +13,14 @@ type FreelancerInfo = {
 
 export const useFreelancerFactory = () => {
   const { data: freelancersData } = useContractRead({
-    address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
+    address: "0xfbeD2EF163dAC5EEbee187051E352Bbee135c8C2",
     abi: CONTRACT_FACTORY_ABI,
-    functionName: "freelansers",
+    functionName: "getFreelancers",
+    watch: true,
   }) as { data: FreelancerInfo[] | undefined };
 
   return {
     freelancersData,
   };
 };
-
 export default useFreelancerFactory;

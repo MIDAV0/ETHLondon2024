@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RegisterHuman } from "./CreateCredential/RegisterHuman";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
+import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
 
 type HeaderMenuLink = {
   label: string;
@@ -57,14 +58,26 @@ export const HeaderMenuLinks = () => {
 export const Header = () => {
   const { address } = useAccount();
 
+  const { data: registered } = useContractRead({
+    address: "0xfbeD2EF163dAC5EEbee187051E352Bbee135c8C2",
+    abi: CONTRACT_FACTORY_ABI,
+    functionName: "freelancerInfoMapping",
+    args: [address],
+    watch: true,
+  }) as { data: string | undefined };
+
   return (
     <div className="sticky lg:static top-0 bg-base-100 min-h-0 flex justify-between items-center align-middle z-20 shadow-md shadow-secondary p-2 m-5">
       <div className="items-center">
         <HeaderMenuLinks />
       </div>
 
-      <div className="flex gap-x-2 mr-4">
-        {address && <RegisterHuman />}
+      <div className="flex gap-x-2 mr-4 items-center">
+        {(address && !registered) && <RegisterHuman />}
+        {(address && registered) && 
+          <div className="p-2 bg-slate-600 rounded-xl font-bold text-white">
+            <Link href={`/freelancerPage/${address}`}>Freelancer Page</Link>
+          </div>}
         <ConnectButton />
       </div>
     </div>
