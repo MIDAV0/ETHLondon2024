@@ -61,12 +61,13 @@ const getContract = (web3:Web3, abi: any, contractAddress: string, address: stri
     return contract;
 }
 
-const approve = async (usdcEthContract: any, ethTokenMessengerContractAddress: string, amount: string, web3: Web3) => {
-    const approveTxGas = await usdcEthContract.methods.approve(ethTokenMessengerContractAddress, amount).estimateGas();
-    const approveTx = await usdcEthContract.methods.approve(ethTokenMessengerContractAddress, amount).send({gas: approveTxGas});
+
+const approve = async (usdcContract: any, destinationContractAddress: string, amount: string, web3: Web3) => {
+    const approveTxGas = await usdcContract.methods.approve(destinationContractAddress, amount).estimateGas();
+    const approveTx = await usdcContract.methods.approve(destinationContractAddress, amount).send({gas: approveTxGas});
     const approveTxReceipt = await waitForTransaction(web3, approveTx.transactionHash);
     console.log('ApproveTxReceipt: ', approveTxReceipt);
-}
+};
 
 const burn = async (ethTokenMessengerContract: any, amount: string, destinationDomain: number, destinationAddressInBytes32: string, usdcEthContractAddress: string, web3: Web3) => {
     const burnTxGas = await ethTokenMessengerContract.methods.depositForBurn(amount, destinationDomain, destinationAddressInBytes32, usdcEthContractAddress).estimateGas();
@@ -107,7 +108,7 @@ const receiveFunds = async (messageTransmitterContract: any, messageBytes: strin
 };
 
 
-const main = async (source: string, destination: string) => {
+const main = async (source: string, destination: string,mintRecipient: string, amount: string) => {
     const sourceNetworkConfig = NetworkConfigurations.find(config => config.NETWORK_KEY === source);
     const destinationNetworkConfig = NetworkConfigurations.find(config => config.NETWORK_KEY === destination);
 
@@ -129,10 +130,7 @@ const main = async (source: string, destination: string) => {
     const sourceTokenMessengerContract = getContract(web3, tokenMessengerAbi, sourceNetworkConfig.TOKEN_MESSENGER_CONTRACT_ADDRESS, sourceSigner.address);
     const sourceMessageContract = getContract(web3, messageAbi, sourceNetworkConfig.MESSAGE_CONTRACT_ADDRESS, sourceSigner.address);
 
-    const mintRecipient = process.env.RECIPIENT_ADDRESS!;
     const destinationAddressInBytes32 = await sourceMessageContract.methods.addressToBytes32(mintRecipient).call();
-
-    const amount = process.env.AMOUNT!;
 
     // Approve, Burn and Retrieve message bytes/hash
     await approve(usdcSourceContract, sourceNetworkConfig.TOKEN_MESSENGER_CONTRACT_ADDRESS, amount, web3);
