@@ -3,6 +3,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "~~/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
 import { useStakingContract } from "~~/hooks/useStakingContract";
+import { StartTask } from "~~/components/Freelancer/StartTask";
+import { CancelTask } from "~~/components/Freelancer/CancelTask";
+import { ConfirmDelivery } from "~~/components/Freelancer/ConfirmDelivery";
+import { ConfirmCompletion } from "~~/components/Freelancer/ConfirmComplete";
+import { SlashFreelancer } from "../Freelancer/SlashFreelancer";
+import { useAccount } from "wagmi";
+import WorldCoinProof from "../WorldCoinProof";
 
 // interface TaskData {
 //   id: number;
@@ -56,6 +63,7 @@ export const MainPage = () => {
   const pathname = usePathname();
   const contractAddress = pathname.slice(16);
   const { tasksData, sharePrice } = useStakingContract({ contractAddress: contractAddress });
+  const { address } = useAccount();
 
   const MatchStatus = ({ status }: { status: number }) => {
     console.log(status);
@@ -111,6 +119,7 @@ export const MainPage = () => {
             <CardTitle>Freelancer Name Account</CardTitle>
             <CardDescription>View your tasks here</CardDescription>
           </CardHeader>
+          {address && <WorldCoinProof userAddress={address} />}
           <div className="grid grid-cols-2 gap-4 p-4">
             {tasksData?.map((task, index) => (
               <Card key={index} className="p-2">
@@ -132,10 +141,11 @@ export const MainPage = () => {
                     <div className="text-lg">{task.shares} Shares = 15 $</div>
                     <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
                   </div>
-                  <div className="flex gap-x-2">
-                    {/* <BuyButton />
-                        <SellButton /> */}
-                  </div>
+                  {address && <div className="flex gap-x-2">
+                    {task.status !== 1 && <StartTask taskId={task.id} contractAddress={contractAddress} />}
+                    {task.status !== 2 && <CancelTask taskId={task.id} contractAddress={contractAddress} />}
+                    <ConfirmDelivery taskId={task.id} contractAddress={contractAddress} />
+                  </div>}
                 </CardFooter>
               </Card>
             ))}
@@ -149,11 +159,34 @@ export const MainPage = () => {
             <CardDescription>Make changes to your account here. Click save when youre done.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="name">Name</Label>
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="username">Username</Label>
+            <div className="grid grid-cols-2 gap-4 p-4">
+              {tasksData?.map((task, index) => (
+                <Card key={index} className="p-2">
+                  <CardHeader>
+                    <CardTitle>
+                      <div className="flex justify-between">
+                        <div>
+                          {task.id}. {task.title}
+                        </div>
+                        <MatchStatus status={task.status} />
+                      </div>
+                    </CardTitle>
+                    <CardDescription>
+                      <div>{task.description}</div>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardFooter className="flex justify-between border-t-2 py-3 px-4">
+                    <div>
+                      <div className="text-lg">{task.shares} Shares = 15 $</div>
+                      <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
+                    </div>
+                    {task.client === address && <div className="flex gap-x-2">
+                      {task.status !== 2 && <SlashFreelancer taskId={task.id} contractAddress={contractAddress} />}
+                      <ConfirmCompletion taskId={task.id} contractAddress={contractAddress} />
+                    </div>}
+                  </CardFooter>
+                </Card>
+              ))}
             </div>
           </CardContent>
           <CardFooter>

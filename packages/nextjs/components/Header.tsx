@@ -74,11 +74,12 @@ export const Header = () => {
       </div>
 
       <div className="flex gap-x-2 mr-4 items-center">
-        {(address && !registered) && <RegisterHuman />}
-        {(address && registered) && 
+        {address && !registered && <RegisterHuman />}
+        {address && registered && (
           <div className="p-2 bg-slate-600 rounded-xl font-bold text-white">
             <Link href={`/freelancerPage/${address}`}>Freelancer Page</Link>
-          </div>}
+          </div>
+        )}
         <ConnectButton />
       </div>
     </div>
