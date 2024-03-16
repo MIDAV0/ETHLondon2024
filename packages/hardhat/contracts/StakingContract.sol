@@ -58,7 +58,7 @@ contract StakingContract is Ownable {
       string memory name,
       string memory symbol
    ) {
-      _transferOwnership(msg.sender);
+      _transferOwnership(tx.origin);
       disputeAdmin = _disputeAdmin;
       // Calculate t
       _ERC20Token = new ERC20Token(address(this), name, symbol, initialSupplyOfShares);
@@ -208,7 +208,7 @@ contract StakingContract is Ownable {
    }
 
    receive() external payable {
-      if (msg.sender == owner()) {
+      if (tx.origin == owner()) {
          frelancerStake += msg.value;
       }
    }

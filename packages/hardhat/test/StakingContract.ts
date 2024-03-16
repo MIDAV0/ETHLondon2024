@@ -70,6 +70,23 @@ describe("StakingContract", function () {
       expect(task1[2]).to.equal(1 * 24 * 3600 + 1 * 24 * 3600);
       expect(task1[3]).to.equal(BigInt(5 * 10 ** 18));
       expect(task1[4]).to.equal(BigInt(10 ** 18));
+      expect(task1[5]).to.equal(0);
     });
+
+    it("Should allow freelancer to complete the task", async function () {
+      await stakingContract.connect(freelancer).startTask(1);
+      const task1 = await stakingContract.tasks(1);
+      expect(task1[5]).to.equal(1);
+    });
+
+    it("Should revert if buyer tries to cancel the task that already started", async function () {
+      await expect(stakingContract.connect(buyer).cancelTask(1)).to.be.revertedWith("Task already started");
+    });
+
+    it("Should allow freelancer to complete the task", async function () {
+      await stakingContract.connect(freelancer).confirmWorkDeleveredFreelancer(1);
+      const task1 = await stakingContract.tasks(1);
+      expect(task1[5]).to.equal(2);
+    }
   });
 });
