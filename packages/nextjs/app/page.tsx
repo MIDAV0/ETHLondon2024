@@ -1,15 +1,17 @@
 "use client";
 
 import type { NextPage } from "next";
-
-// import { useAccount } from "wagmi";
+import { useAccount } from "wagmi";
+import { TotalNumFreelancer } from "~~/components/Freelancer/TotalNumFreelancer";
 
 const Home: NextPage = () => {
-  // const { address: connectedAddress } = useAccount();
+  const { address: connectedAddress } = useAccount();
 
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10">Main Page</div>
+      <div className="">Main Page</div>
+      <div>{connectedAddress}</div>
+      <TotalNumFreelancer />
     </>
   );
 };

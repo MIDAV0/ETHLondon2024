@@ -6,71 +6,30 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
-    EmployeeShares: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    ContractFactory: {
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
-          inputs: [
+          inputs: [],
+          name: "MAX_HOURS",
+          outputs: [
             {
-              internalType: "address",
-              name: "_EmployeeToken",
-              type: "address",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "address",
-              name: "trader",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "subject",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "isBuy",
-              type: "bool",
-            },
-            {
-              indexed: false,
               internalType: "uint256",
-              name: "shareAmount",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "ethAmount",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "supply",
+              name: "",
               type: "uint256",
             },
           ],
-          name: "Trade",
-          type: "event",
+          stateMutability: "view",
+          type: "function",
         },
         {
           inputs: [],
-          name: "EmployeeToken",
+          name: "MIN_HOURS",
           outputs: [
             {
-              internalType: "contract IEmployeeToken",
+              internalType: "uint256",
               name: "",
-              type: "address",
+              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -79,17 +38,42 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "address",
-              name: "sharesSubject",
-              type: "address",
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "tokenName",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "tokenSymbol",
+              type: "string",
             },
             {
               internalType: "uint256",
-              name: "amount",
+              name: "numberOfShares",
               type: "uint256",
             },
+            {
+              internalType: "uint256",
+              name: "stakeAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "_disputeAdmin",
+              type: "address",
+            },
           ],
-          name: "buyShares",
+          name: "createContract",
           outputs: [],
           stateMutability: "payable",
           type: "function",
@@ -97,17 +81,45 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "address",
-              name: "sharesSubject",
-              type: "address",
-            },
-            {
               internalType: "uint256",
-              name: "amount",
+              name: "",
               type: "uint256",
             },
           ],
-          name: "getBuyPrice",
+          name: "freelancers",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "id",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "address",
+              name: "stakingContractAddress",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getFreelancerCount",
           outputs: [
             {
               internalType: "uint256",
@@ -119,43 +131,8 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "supply",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "getPrice",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "pure",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "sharesSubject",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "getSellPrice",
+          inputs: [],
+          name: "idCounter",
           outputs: [
             {
               internalType: "uint256",
@@ -167,337 +144,133 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "sharesSubject",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "sellShares",
-          outputs: [],
           stateMutability: "payable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "sharesBalance",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "sharesSupply",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          type: "receive",
         },
       ],
       inheritedFunctions: {},
     },
-    EmployeeToken: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  },
+  84532: {
+    ContractFactory: {
+      address: "0x5e0B21926c7EF962Ce6C0eeB62C5B2733eEb3DE6",
       abi: [
         {
+          inputs: [],
+          name: "MAX_HOURS",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "MIN_HOURS",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [
             {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "tokenName",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "tokenSymbol",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "numberOfShares",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "stakeAmount",
+              type: "uint256",
+            },
+            {
               internalType: "address",
-              name: "initialOwner",
+              name: "_disputeAdmin",
               type: "address",
             },
           ],
-          stateMutability: "nonpayable",
-          type: "constructor",
+          name: "createContract",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
         },
         {
-          anonymous: false,
           inputs: [
             {
-              indexed: true,
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "freelancers",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "id",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "address",
+              name: "stakingContractAddress",
+              type: "address",
+            },
+            {
               internalType: "address",
               name: "owner",
               type: "address",
             },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "spender",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
-          ],
-          name: "Approval",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "previousOwner",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "newOwner",
-              type: "address",
-            },
-          ],
-          name: "OwnershipTransferred",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "from",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
-          ],
-          name: "Transfer",
-          type: "event",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "owner",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "spender",
-              type: "address",
-            },
-          ],
-          name: "allowance",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
           ],
           stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "spender",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "approve",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "balanceOf",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "burn",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "burnFrom",
-          outputs: [],
-          stateMutability: "nonpayable",
           type: "function",
         },
         {
           inputs: [],
-          name: "decimals",
+          name: "getFreelancerCount",
           outputs: [
-            {
-              internalType: "uint8",
-              name: "",
-              type: "uint8",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "spender",
-              type: "address",
-            },
             {
               internalType: "uint256",
-              name: "subtractedValue",
-              type: "uint256",
-            },
-          ],
-          name: "decreaseAllowance",
-          outputs: [
-            {
-              internalType: "bool",
               name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "spender",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "addedValue",
               type: "uint256",
-            },
-          ],
-          name: "increaseAllowance",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "mint",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "name",
-          outputs: [
-            {
-              internalType: "string",
-              name: "",
-              type: "string",
             },
           ],
           stateMutability: "view",
@@ -505,40 +278,7 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "owner",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "renounceOwnership",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "symbol",
-          outputs: [
-            {
-              internalType: "string",
-              name: "",
-              type: "string",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "totalSupply",
+          name: "idCounter",
           outputs: [
             {
               internalType: "uint256",
@@ -550,101 +290,11 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "transfer",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "from",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "transferFrom",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "newOwner",
-              type: "address",
-            },
-          ],
-          name: "transferOwnership",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          stateMutability: "payable",
+          type: "receive",
         },
       ],
-      inheritedFunctions: {
-        allowance:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        approve:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        balanceOf:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        decimals:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        decreaseAllowance:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        increaseAllowance:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        name: "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        symbol:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        totalSupply:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        transfer:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        transferFrom:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        burn: "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        burnFrom:
-          "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        owner: "@openzeppelin/contracts/access/Ownable.sol",
-        renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
-        transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
-      },
+      inheritedFunctions: {},
     },
   },
 } as const;
