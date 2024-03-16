@@ -10,7 +10,7 @@ const EmployeeTokenContract: DeployFunction = async function (hre: HardhatRuntim
 
   const employeeContract = await deploy("EmployeeToken", {
     from: deployer,
-    args: [1_000_000_000],
+    args: [deployer],
     log: true,
   });
 
