@@ -1,3 +1,5 @@
+"use client";
+
 import { useTargetNetwork } from "./useTargetNetwork";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { useContractRead } from "wagmi";

@@ -1,13 +1,8 @@
 import type { NextPage } from "next";
+import { FreeLancerView } from "~~/components/view/FreeLancerView";
 
 const Freelancers: NextPage = () => {
-  return (
-    <>
-      <div className="text-center mt-8 bg-secondary p-10">
-        <h1 className="text-4xl my-0">Freelancers</h1>
-      </div>
-    </>
-  );
+  return <FreeLancerView />;
 };
 
 export default Freelancers;
