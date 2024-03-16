@@ -2,10 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { parseEther } from "viem/utils";
+import { useAccount } from "wagmi";
+import { useContractWrite } from "wagmi";
 import { z } from "zod";
 import { Button } from "~~/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~~/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~~/components/ui/form";
 import { Input } from "~~/components/ui/input";
+import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -40,18 +44,45 @@ export function ProfileForm() {
       stakesAmount: "",
     },
   });
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    address: "0xBfec823dF7352Cf08388877647c0E89A2b242F9D",
+    abi: CONTRACT_FACTORY_ABI,
+    functionName: "createContract",
+  });
+
+  const { address } = useAccount();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     const processedValues = {
       ...values,
-      numberOfShares: Number(values.numberOfShares),
-      stakesAmount: Number(values.stakesAmount),
+      numberOfShares: BigInt(values.numberOfShares),
+      stakesAmount: parseEther(values.stakesAmount),
     };
+    write({
+      args: [
+        processedValues.name,
+        processedValues.description,
+        processedValues.tokenName,
+        processedValues.tokenSymbol,
+        processedValues.numberOfShares,
+        processedValues.stakesAmount,
+        "0xcC2042a7c7997a04e26389B9689f2AE766342732",
+      ],
+      value: parseEther(values.stakesAmount),
+    });
 
     console.log(processedValues);
   }
+
+  const sliceAddress = (address: string) => {
+    return address.slice(0, 6) + "..." + address.slice(-4);
+  };
+
+  const toScan = (hash: string) => {
+    return `https://sepolia.basescan.org/address/${hash}`;
+  };
 
   return (
     <Form {...form}>
@@ -135,6 +166,14 @@ export function ProfileForm() {
           )}
         />
         <Button type="submit">Submit</Button>
+        {data && (
+          <div>
+            Transaction Hash:
+            <a onClick={toScan(data.hash)}>{sliceAddress(data.hash)}</a>
+          </div>
+        )}
+        {isLoading && <div>Waiting for confirmation...</div>}
+        {isSuccess && <div>Transaction confirmed.</div>}
       </form>
     </Form>
   );
