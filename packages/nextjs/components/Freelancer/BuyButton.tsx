@@ -1,14 +1,28 @@
 import React from "react";
+import { toast } from "sonner";
 import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 
 export const BuyButton = () => {
-  const { write: buy } = useContractWrite({
+  const {
+    write: buy,
+    isError,
+    isSuccess,
+    isLoading,
+  } = useContractWrite({
     abi: STAKING_CONTRACT_ABI,
     address: "0x1234567890123456789012345678901234567890",
     functionName: "buyShares",
   });
+
+  if (isError) {
+    toast.error("Error buying shares");
+  }
+
+  if (isSuccess) {
+    toast.success("Shares brought successfully");
+  }
 
   return (
     <>
@@ -17,8 +31,9 @@ export const BuyButton = () => {
         onClick={() => {
           buy({ args: [BigInt(1)] });
         }}
+        disabled={isLoading}
       >
-        Buy
+        {isLoading ? "Buying..." : "Buy"}
       </Button>
     </>
   );
