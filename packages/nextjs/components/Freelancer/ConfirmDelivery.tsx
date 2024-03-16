@@ -4,24 +4,24 @@ import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 
-export const SellButton = () => {
+export const ConfirmDelivery = (taskId: number) => {
   const {
-    write: sell,
+    write: confirmDelivery,
     isError,
     isSuccess,
     isLoading,
   } = useContractWrite({
     abi: STAKING_CONTRACT_ABI,
     address: "0x1234567890123456789012345678901234567890",
-    functionName: "sellShares",
+    functionName: "confirmWorkDeleveredFreelancer",
   });
 
   if (isError) {
-    toast.error("Error selling shares");
+    toast.error("Error confirming");
   }
 
   if (isSuccess) {
-    toast.success("Shares sold successfully");
+    toast.success("Confirming successfully");
   }
 
   return (
@@ -29,10 +29,11 @@ export const SellButton = () => {
       <Button
         className="bg-blue-500 text-white p-2 rounded-md"
         onClick={() => {
-          sell({ args: [BigInt(1)] });
+          confirmDelivery({ args: [BigInt(taskId), true] });
         }}
+        disabled={isLoading}
       >
-        {isLoading ? "Selling..." : "Sell"}
+        {isLoading ? "Confirming..." : "Confirm Delivery"}
       </Button>
     </>
   );

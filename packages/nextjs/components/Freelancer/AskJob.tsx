@@ -43,7 +43,7 @@ export const AskJob = () => {
   const onSubmit = (values: any) => {
     console.log("values", values);
     write({
-      args: [jobPrice, jobDeadline],
+      args: [jobDeadline, jobPrice, jobTitle, jobDescription],
     });
   };
 
@@ -73,6 +73,7 @@ export const AskJob = () => {
               value={jobDeadline}
               onChange={e => setJobDeadline(e.target.value)}
             />
+            <div>Buy Price: {buyPrice || 0}</div>
             <Button onClick={onSubmit} className="bg-blue-500 text-white p-2 rounded-md">
               Create Job
             </Button>

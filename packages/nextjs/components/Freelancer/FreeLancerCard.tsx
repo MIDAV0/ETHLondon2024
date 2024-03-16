@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AskJob } from "~~/components/Freelancer/AskJob";
 import { BuyButton } from "~~/components/Freelancer/BuyButton";
 import { SellButton } from "~~/components/Freelancer/SellButton";
+import { Badge } from "~~/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~~/components/ui/card";
 import useStakingContract from "~~/hooks/useStakingContract";
 
@@ -27,13 +28,23 @@ export const FreeLancerCard = ({
 
   const sliceArTxId = useCallback((arTxId: string) => `${arTxId.slice(0, 6)}...${arTxId.slice(-4)}`, []);
 
+  const [isVerfied, setIsVerfied] = useState<boolean>(false);
+
+  useEffect(() => {
+    // @ts-ignore
+    if (data.owner === addr) {
+      setIsVerfied(true);
+    }
+  });
+
   return (
     <Card className="mb-4 p-2">
       <CardHeader>
         <CardTitle>
           <div className="flex justify-between">
-            <div>
-              {data.name} - {data.owner}
+            <div className="flex flex-row h-7 space-x-3 align-bottom">
+              <div className="align-bottom">{data.name} - {data.owner}</div>
+              <Badge className="bg-primary">Verified</Badge>
             </div>
             <AskJob />
           </div>
