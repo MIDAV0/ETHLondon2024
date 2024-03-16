@@ -108,7 +108,7 @@ const receiveFunds = async (messageTransmitterContract: any, messageBytes: strin
 };
 
 
-const main = async (source: string, destination: string,mintRecipient: string, amount: string) => {
+export const transferToBase = async (source: string, destination: string,mintRecipient: string, amount: string) => {
     const sourceNetworkConfig = NetworkConfigurations.find(config => config.NETWORK_KEY === source);
     const destinationNetworkConfig = NetworkConfigurations.find(config => config.NETWORK_KEY === destination);
 
