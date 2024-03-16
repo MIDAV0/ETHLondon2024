@@ -12,7 +12,6 @@ import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
-
   return (
     <>
       <div className="flex flex-col min-h-screen">

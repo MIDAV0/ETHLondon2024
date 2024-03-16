@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { AskJob } from "~~/components/Freelancer/AskJob";
 import { BuyButton } from "~~/components/Freelancer/BuyButton";
 import { SellButton } from "~~/components/Freelancer/SellButton";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~~/components/ui/card";
@@ -15,7 +16,12 @@ export const FreeLancerCard = () => {
   return (
     <Card className="mb-4 p-2">
       <CardHeader>
-        <CardTitle>owner</CardTitle>
+        <CardTitle>
+          <div className="flex justify-between">
+            <div>Owner</div>
+            <AskJob />
+          </div>
+        </CardTitle>
         <CardDescription>
           <div>SkillSet</div>
         </CardDescription>
