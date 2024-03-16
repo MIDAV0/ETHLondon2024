@@ -3,8 +3,10 @@ import { toast } from "sonner";
 import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
+import { buttonConfig } from "~~/types";
 
-export const CancelTask = (taskId: number) => {
+
+export const CancelTask = ({ taskId, contractAddress }: buttonConfig) => {
   const {
     write: cancelTask,
     isError,
@@ -12,7 +14,7 @@ export const CancelTask = (taskId: number) => {
     isLoading,
   } = useContractWrite({
     abi: STAKING_CONTRACT_ABI,
-    address: "0x1234567890123456789012345678901234567890",
+    address: contractAddress as `0x${string}`,
     functionName: "cancelTask",
   });
 
