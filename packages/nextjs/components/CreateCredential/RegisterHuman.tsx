@@ -1,4 +1,5 @@
 import React from "react";
+import { ProfileForm } from "~~/components/CreateCredential/RegistrationForm/RegistrationForm";
 import { Button } from "~~/components/ui/button";
 import {
   Dialog,
@@ -17,12 +18,10 @@ export const RegisterHuman = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </DialogDescription>
+          <DialogTitle>Create your Profile</DialogTitle>
+          <DialogDescription>Fill out the form to create your profile and start selling your skills.</DialogDescription>
         </DialogHeader>
+        <ProfileForm />
       </DialogContent>
     </Dialog>
   );
