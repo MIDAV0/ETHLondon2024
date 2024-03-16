@@ -116,7 +116,7 @@ export const FreeLancerCard = ({
               type="number"
               placeholder="Shares"
               value={tradeAmount}
-              onChange={e => setTradeAmount(e.target.value)}
+              onChange={e => setTradeAmount(Number(e.target.value))}
               min={0}
               step=".01"
             />

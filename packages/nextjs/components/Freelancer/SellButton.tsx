@@ -4,7 +4,15 @@ import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 
-export const SellButton = ({ contractAddress, shares, price }: { contractAddress: string, shares: bigint, price: bigint }) => {
+export const SellButton = ({
+  contractAddress,
+  shares,
+  price,
+}: {
+  contractAddress: string;
+  shares: bigint;
+  price: bigint;
+}) => {
   const {
     write: sell,
     isError,

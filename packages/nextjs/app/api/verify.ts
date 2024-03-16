@@ -1,4 +1,3 @@
-import { createUserRecord } from "./create-user-record";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export const config = {
@@ -42,13 +41,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Verify
         console.log(`Received ${verifyRes.status} response from World ID /verify endpoint:\n`, wldResponse);
         if (verifyRes.status == 200) {
           console.log("Credential verified! This user's nullifier hash is: ", wldResponse.nullifier_hash);
-
-          try {
-            await createUserRecord(wldResponse.nullifier_hash, true, req.body.address);
-          } catch (error) {
-            return res.status(500).send({ code: "error", detail: "Internal server error" });
-          }
-
           res.status(verifyRes.status).send({
             code: "success",
             detail: "This action verified correctly!",

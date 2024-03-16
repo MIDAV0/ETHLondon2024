@@ -106,7 +106,7 @@ export const AskJob = ({ contractAddress, tokenAddress }: { contractAddress: str
               type="number"
               placeholder="Job Duration (hours)"
               value={jobDuration}
-              onChange={e => setJobDuration(e.target.value)}
+              onChange={e => setJobDuration(Number(e.target.value))}
               min={6}
             />
             <div className="p-4 text-center rounded-lg border-2 border-dashed border-gray-300">

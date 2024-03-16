@@ -5,7 +5,6 @@ import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 import { buttonConfig } from "~~/types";
 
-
 export const CancelTask = ({ taskId, contractAddress }: buttonConfig) => {
   const {
     write: cancelTask,
