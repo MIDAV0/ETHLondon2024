@@ -64,6 +64,7 @@ export const Header = () => {
     functionName: "freelancerInfoMapping",
     args: [address],
     watch: true,
+    enabled: !!address,
   }) as { data: string | undefined };
 
   return (
