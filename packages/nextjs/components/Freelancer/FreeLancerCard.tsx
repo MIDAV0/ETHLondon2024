@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AskJob } from "~~/components/Freelancer/AskJob";
 import { BuyButton } from "~~/components/Freelancer/BuyButton";
 import { SellButton } from "~~/components/Freelancer/SellButton";
+import { TippingModal } from "~~/components/tipping/TippingModal";
 import { Badge } from "~~/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~~/components/ui/card";
 import useStakingContract from "~~/hooks/useStakingContract";
@@ -87,6 +88,7 @@ export const FreeLancerCard = ({
           <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
         </div>
         <div className="flex gap-x-2">
+          <TippingModal />
           <BuyButton />
           <SellButton />
         </div>
