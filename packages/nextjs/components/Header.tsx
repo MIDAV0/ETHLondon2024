@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "./ui/button";
+import { RegisterHuman } from "./CreateCredential/RegisterHuman";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 type HeaderMenuLink = {
@@ -61,7 +61,7 @@ export const Header = () => {
       </div>
 
       <div className="flex gap-x-2 mr-4">
-        <Button>Create +</Button>
+        <RegisterHuman />
         <ConnectButton />
       </div>
     </div>
