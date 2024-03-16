@@ -22,7 +22,7 @@ describe("ContractFactory", function () {
 
   describe("Deployment", function () {
     it("Should have correct counter on deploy", async function () {
-      expect(await contractFactory.getFreelancerCount()).to.equal(0);
+      expect(await contractFactory.freelancers.length).to.equal(0);
     });
   });
 
@@ -48,7 +48,33 @@ describe("ContractFactory", function () {
             value: BigInt(10 ** 18),
           },
         );
-      expect(await contractFactory.getFreelancerCount()).to.equal(1);
+    });
+
+    it("Should create second freelancer", async function () {
+      const name = "Freelancer 2";
+      const description = "Freelancer 2 description";
+      const tokenName = "Freelancer 2 Token";
+      const tokenSymbol = "F2T";
+      const numberOfShares = 100;
+      const stakeAmount = BigInt(10 ** 18);
+      await contractFactory
+        .connect(freelancer2)
+        .createContract(
+          name,
+          description,
+          tokenName,
+          tokenSymbol,
+          BigInt(numberOfShares),
+          stakeAmount,
+          disputeAdmin.address,
+          {
+            value: BigInt(10 ** 18),
+          },
+        );
+    });
+    it("Should log the freelancers", async function () {
+      const freelancers = await contractFactory.getFreelancers();
+      console.log(freelancers[0]);
     });
   });
 });

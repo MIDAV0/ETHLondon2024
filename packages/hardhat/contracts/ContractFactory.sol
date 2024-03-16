@@ -58,8 +58,8 @@ contract ContractFactory {
 		);
 	}
 
-	function getFreelancerCount() public view returns (uint) {
-		return freelancers.length;
+	function getFreelancers() public view returns (FreelancerInfo[] memory) {
+		return freelancers;
 	}
 
 	receive() external payable {}
