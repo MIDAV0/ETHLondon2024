@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { parseEther } from "viem/utils";
@@ -76,6 +77,7 @@ export function ProfileForm() {
     console.log(processedValues);
   }
 
+
   const sliceAddress = (address: string) => {
     return address.slice(0, 6) + "..." + address.slice(-4);
   };
@@ -83,6 +85,10 @@ export function ProfileForm() {
   const toScan = (hash: string) => {
     return `https://sepolia.basescan.org/address/${hash}`;
   };
+
+  const [tokenShares, setTokenShares] = useState(24);
+  const [stakesAmount, setStakesAmount] = useState(0);
+
 
   return (
     <Form {...form}>
@@ -139,32 +145,59 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="numberOfShares"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Number Of Shares</FormLabel>
-              <FormControl>
-                <Input placeholder="Number Of Shares" {...field} type="number" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="stakesAmount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Stakes Amount</FormLabel>
-              <FormControl>
-                <Input placeholder="Stakes Amount" {...field} type="number" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex flex-row items-center justify-between">
+          <FormField
+            control={form.control}
+            name="numberOfShares"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Number Of Shares</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Number Of Shares"
+                    {...field}
+                    type="number"
+                    min={24}
+                    max={720}
+                    onChange={e => {
+                      setTokenShares(Number(e.target.value));
+                    }}
+                    value={tokenShares}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="stakesAmount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Stake Amount</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Stake Amount (ETH)"
+                    {...field}
+                    type="number"
+                    onChange={e => {
+                      setStakesAmount(Number(e.target.value));
+                    }}
+                    value={stakesAmount}
+                    min={0}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex justify-center">
+          <p>
+            Hourly Rate: {stakesAmount && tokenShares ? Math.round((stakesAmount / tokenShares) * 10000) / 10000 : 0}{" "}
+            ETH/hr
+          </p>
+        </div>
         <Button type="submit">Submit</Button>
         {data && (
           <div>
