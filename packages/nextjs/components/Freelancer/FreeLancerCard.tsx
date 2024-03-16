@@ -24,18 +24,36 @@ export const FreeLancerCard = ({
 
   console.log(sharePrice);
 
-  const sliceOwner = useCallback((owner: `0x${string}`) => `${owner.slice(0, 6)}...${owner.slice(-4)}`, []);
-
-  const sliceArTxId = useCallback((arTxId: string) => `${arTxId.slice(0, 6)}...${arTxId.slice(-4)}`, []);
+  const sliceOwner = useCallback((owner: string) => `${owner.slice(0, 6)}...${owner.slice(-4)}`, []);
 
   const [isVerfied, setIsVerfied] = useState<boolean>(false);
 
   useEffect(() => {
     // @ts-ignore
-    if (data.owner === addr) {
-      setIsVerfied(true);
-    }
-  });
+    const checkUserRecord = async () => {
+      fetch("/check-user-record", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ address: data.owner }),
+      })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return res.json();
+        })
+        .then(data => {
+          console.log("data", data);
+          setIsVerfied(data.verified);
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    };
+    checkUserRecord();
+  }, [data.owner]);
 
   return (
     <Card className="mb-4 p-2">
@@ -43,8 +61,10 @@ export const FreeLancerCard = ({
         <CardTitle>
           <div className="flex justify-between">
             <div className="flex flex-row h-7 space-x-3 align-bottom">
-              <div className="align-bottom">{data.name} - {data.owner}</div>
-              <Badge className="bg-primary">Verified</Badge>
+              <div className="align-bottom">
+                {data.name} - {sliceOwner(data.owner)}
+              </div>
+              {isVerfied && <Badge className="bg-primary">Verified</Badge>}
             </div>
             <AskJob />
           </div>

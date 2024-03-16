@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { parse } from "path";
 import { useForm } from "react-hook-form";
 import { parseEther } from "viem/utils";
-import { useContractWrite, useAccount } from "wagmi";
+import { useAccount, useContractWrite } from "wagmi";
 import { z } from "zod";
 import { Button } from "~~/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~~/components/ui/form";
 import { Input } from "~~/components/ui/input";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
-import { parse } from "path";
 
 const formSchema = z.object({
   name: z.string().min(2, {

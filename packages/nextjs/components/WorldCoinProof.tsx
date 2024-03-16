@@ -3,7 +3,7 @@ import { IDKitWidget, VerificationLevel } from "@worldcoin/idkit";
 import type { ISuccessResult } from "@worldcoin/idkit";
 import type { VerifyReply } from "~~/app/api/verify";
 
-const WorldCoinProof = () => {
+const WorldCoinProof = (userAddress: `0x${string}`) => {
   if (!process.env.NEXT_PUBLIC_WLD_APP_ID) {
     throw new Error("app_id is not set in environment variables!");
   }
@@ -37,6 +37,22 @@ const WorldCoinProof = () => {
     const data: VerifyReply = await res.json();
     if (res.status == 200) {
       console.log("Successful response from backend:\n", data); // Log the response from our backend for visibility
+      await fetch("/api/add-user-wld", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nullifier_hash: result.nullifier_hash,
+          address: userAddress,
+        }),
+      }).then(res => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        console.log("Successful response from backend:\n", data);
+        return res.json();
+      });
     } else {
       throw new Error(`Error code ${res.status} (${data.code}): ${data.detail}` ?? "Unknown error."); // Throw an error if verification fails
     }
