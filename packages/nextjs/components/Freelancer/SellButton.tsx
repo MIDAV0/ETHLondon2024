@@ -1,12 +1,16 @@
 import React from "react";
+import { toast } from "sonner";
 import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
-import { toast } from "sonner"
-
 
 export const SellButton = () => {
-  const { write: sell, isError, isSuccess, isLoading } = useContractWrite({
+  const {
+    write: sell,
+    isError,
+    isSuccess,
+    isLoading,
+  } = useContractWrite({
     abi: STAKING_CONTRACT_ABI,
     address: "0x1234567890123456789012345678901234567890",
     functionName: "sellShares",
@@ -19,7 +23,6 @@ export const SellButton = () => {
   if (isSuccess) {
     toast.success("Shares sold successfully");
   }
-
 
   return (
     <>
