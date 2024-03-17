@@ -7,6 +7,8 @@ import { RegisterHuman } from "./CreateCredential/RegisterHuman";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useContractRead } from "wagmi";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
+import chainSmart from "~~/utils/chainSmart";
+import { useNetwork } from "wagmi";
 
 type HeaderMenuLink = {
   label: string;
@@ -38,9 +40,8 @@ export const HeaderMenuLinks = () => {
             <Link
               href={href}
               passHref
-              className={`${
-                isActive ? "bg-secondary shadow-md" : ""
-              }  hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
+              className={`${isActive ? "bg-secondary shadow-md" : ""
+                }  hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
             >
               {icon}
               <span>{label}</span>
@@ -57,9 +58,14 @@ export const HeaderMenuLinks = () => {
  */
 export const Header = () => {
   const { address } = useAccount();
+  const { chain } = useNetwork();
+
+
+  const smartContract = chainSmart(chain?.id || 84532);
+  console.log(chain?.id, smartContract);
 
   const { data: registered } = useContractRead({
-    address: "0xfbeD2EF163dAC5EEbee187051E352Bbee135c8C2",
+    address: smartContract,
     abi: CONTRACT_FACTORY_ABI,
     functionName: "freelancerInfoMapping",
     args: [address],

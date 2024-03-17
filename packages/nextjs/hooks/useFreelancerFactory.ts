@@ -2,6 +2,7 @@
 
 import { useContractRead } from "wagmi";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
+import chainSmart from "~~/utils/chainSmart";
 
 type FreelancerInfo = {
   id: number;
@@ -11,9 +12,11 @@ type FreelancerInfo = {
   owner: string;
 };
 
-export const useFreelancerFactory = () => {
+export const useFreelancerFactory = (chainid: number) => {
+  const smartContract = chainSmart(chainid);
   const { data: freelancersData } = useContractRead({
-    address: "0xfbeD2EF163dAC5EEbee187051E352Bbee135c8C2",
+    address: smartContract,
+    chainId: chainid,
     abi: CONTRACT_FACTORY_ABI,
     functionName: "getFreelancers",
     watch: true,
