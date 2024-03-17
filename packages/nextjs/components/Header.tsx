@@ -6,9 +6,9 @@ import { usePathname } from "next/navigation";
 import { RegisterHuman } from "./CreateCredential/RegisterHuman";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useContractRead } from "wagmi";
+import { useNetwork } from "wagmi";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
 import chainSmart from "~~/utils/chainSmart";
-import { useNetwork } from "wagmi";
 
 type HeaderMenuLink = {
   label: string;
@@ -57,12 +57,10 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
 
-
   const smartContract = chainSmart(chain?.id || 84532);
-  console.log(chain?.id, smartContract);
 
   const { data: registered } = useContractRead({
     address: smartContract,
@@ -73,6 +71,8 @@ export const Header = () => {
     enabled: !!address,
   }) as { data: string | undefined };
 
+  let isRegistered = address === registered?.[4];
+
   return (
     <div className="sticky lg:static top-0 bg-base-100 min-h-0 flex justify-between items-center align-middle z-20 shadow-md shadow-secondary p-2 m-5">
       <div className="items-center">
@@ -80,12 +80,15 @@ export const Header = () => {
       </div>
 
       <div className="flex gap-x-2 mr-4 items-center">
-        {address && !registered && <RegisterHuman />}
-        {address && registered && (
+        {isConnected && (!isRegistered ? (
+          // Show the RegisterHuman component if the user is not registered
+          <RegisterHuman />
+        ) : (
+          // Show the link to the freelancer page if the user is registered
           <div className="p-2 bg-slate-600 rounded-xl font-bold text-white">
             <Link href={`/freelancerPage/${address}`}>Freelancer Page</Link>
           </div>
-        )}
+        ))}
         <ConnectButton />
       </div>
     </div>

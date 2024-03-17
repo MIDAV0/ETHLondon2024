@@ -2,9 +2,9 @@
 
 import React from "react";
 import { useFreelancerFactory } from "../../hooks/useFreelancerFactory";
+import { useNetwork } from "wagmi";
 import { FreeLancerCard } from "~~/components/Freelancer/FreeLancerCard";
 import { FreeLancerHeader } from "~~/components/Freelancer/FreeLancerHeader";
-import { useNetwork } from "wagmi";
 
 export const FreeLancerView = () => {
   const { chain } = useNetwork();
@@ -12,11 +12,11 @@ export const FreeLancerView = () => {
 
   return (
     <div className="w-[70%] mx-auto p-2">
-      <div>FreeLancer</div>
-      <div>
+      <div className=" align-middle text-center font-semibold text-2xl m-4">FreeLancer</div>
+      <div className="my-2">
         <FreeLancerHeader />
       </div>
-      <div className="">
+      <div>
         {
           // @ts-ignore
           freelancersData?.map(freelancer => {
