@@ -13,10 +13,11 @@ type FreelancerInfo = {
 };
 
 export const useFreelancerFactory = (chainid: number) => {
+  console.log("chainid", chainid);
   const smartContract = chainSmart(chainid);
+  console.log("smartContract", smartContract);
   const { data: freelancersData } = useContractRead({
     address: smartContract,
-    chainId: chainid,
     abi: CONTRACT_FACTORY_ABI,
     functionName: "getFreelancers",
     watch: true,
