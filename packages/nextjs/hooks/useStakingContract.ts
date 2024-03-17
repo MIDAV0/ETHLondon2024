@@ -56,7 +56,7 @@ export const useStakingContract = ({ contractAddress }: { contractAddress: strin
       result.push(data);
     }
     const tasks = await Promise.all(result);
-    setTasksForClient(tasks.filter(task => task.client === address));
+    setTasksForClient(tasks.filter((task: any) => task?.[6].toLocaleLowerCase() === address.toLocaleLowerCase()));
   };
 
   const { data: tokenAddress } = useContractRead({
