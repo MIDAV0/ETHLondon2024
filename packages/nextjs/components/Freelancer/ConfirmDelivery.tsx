@@ -30,7 +30,7 @@ export const ConfirmDelivery = ({ taskId, contractAddress }: buttonConfig) => {
       <Button
         className="bg-blue-500 text-white p-2 rounded-md"
         onClick={() => {
-          confirmDelivery({ args: [BigInt(taskId), true] });
+          confirmDelivery({ args: [BigInt(taskId)] });
         }}
         disabled={isLoading}
       >
