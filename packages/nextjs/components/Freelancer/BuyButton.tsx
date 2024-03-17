@@ -35,7 +35,7 @@ export const BuyButton = ({
   return (
     <>
       <Button
-        className="bg-blue-500 text-white p-2 rounded-md"
+        className="bg-blue-500 text-white p-2 rounded-md w-[100px]"
         onClick={() => {
           buy({ args: [shares], value: price });
         }}

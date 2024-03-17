@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { NounsAvatar } from "../Avatars/NounsAvatar";
 import { Input } from "../ui/input";
 import { formatUnits, parseEther } from "viem";
 import { useContractRead } from "wagmi";
@@ -97,8 +98,11 @@ export const FreeLancerCard = ({
         <CardTitle>
           <div className="flex justify-between">
             <div className="flex flex-row h-7 space-x-3 align-bottom">
-              <div className="align-bottom">
-                {data.name} - {sliceOwner(data.owner)}
+              <div className="flex flex-row items-center align-bottom space-x-5">
+                <p>
+                  {data.name} - {sliceOwner(data.owner)}
+                </p>
+                <NounsAvatar />
               </div>
               {isVerfied && <Badge className="bg-primary">Verified</Badge>}
             </div>
@@ -135,7 +139,7 @@ export const FreeLancerCard = ({
               min={0}
               step=".01"
             />
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between space-x-4">
               <BuyButton
                 contractAddress={data.stakingContractAddress}
                 shares={parseEther(tradeAmount.toString())}
