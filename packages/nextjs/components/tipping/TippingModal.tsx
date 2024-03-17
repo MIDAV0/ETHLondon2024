@@ -15,7 +15,7 @@ import { Label } from "~~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~~/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~~/components/ui/select";
 
-export const TippingModal = () => {
+export const TippingModal = ({ contractAddress }: { contractAddress: string }) => {
   const [tipPercentage, setTipPercentage] = useState("15");
   const [currency, setCurrency] = useState("USDC");
   const [preventClose, setPreventClose] = useState(true);
@@ -76,7 +76,7 @@ export const TippingModal = () => {
             </SelectContent>
           </Select>
         </div>
-        <TippingButton />
+        <TippingButton contractAddress={contractAddress} />
         {preventClose && <Button onClick={handleSubmit}>Cancel</Button>}
       </DialogContent>
     </Dialog>

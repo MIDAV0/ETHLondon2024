@@ -103,7 +103,7 @@ export const FreeLancerCard = ({
               {isVerfied && <Badge className="bg-primary">Verified</Badge>}
             </div>
             <div className="space-x-3">
-              <TippingModal />
+              <TippingModal contractAddress={data.owner} />
               <AskJob contractAddress={data.stakingContractAddress} tokenAddress={tokenAddress || ""} />
             </div>
           </div>
