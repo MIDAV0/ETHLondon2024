@@ -115,12 +115,12 @@ export const MainPage = () => {
         <TabsTrigger value="viewPage">Freelancer Page</TabsTrigger>
       </TabsList>
       <TabsContent value="accountPage">
-        <div>
+        <div className="p-2">
           <CardHeader>
             <CardTitle>Freelancer Name Account</CardTitle>
             <CardDescription>View your tasks here</CardDescription>
           </CardHeader>
-          {address && <WorldCoinProof userAddress={address} />}
+          <div className="p-6">{address && <WorldCoinProof userAddress={address} />}</div>
           <div className="grid grid-cols-2 gap-4 p-4">
             {tasksData?.map((task: any, index: number) => (
               <Card key={index} className="p-2">
@@ -155,8 +155,8 @@ export const MainPage = () => {
           </div>
         </div>
       </TabsContent>
-      <TabsContent value="viewPage">
-        <Card>
+      <TabsContent value="viewPage" className="p-2">
+        <Card className="p-2">
           <CardHeader>
             <CardTitle>Account</CardTitle>
             <CardDescription>Make changes to your account here. Click save when youre done.</CardDescription>

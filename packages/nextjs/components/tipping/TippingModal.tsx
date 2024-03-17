@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~
 export const TippingModal = () => {
   const [tipPercentage, setTipPercentage] = useState("15");
   const [currency, setCurrency] = useState("USDC");
-  const [preventClose, setPreventClose] = useState(false);
+  const [preventClose, setPreventClose] = useState(true);
 
   const handleSubmit = () => {
     console.log(tipPercentage, currency);
@@ -26,7 +26,7 @@ export const TippingModal = () => {
   };
 
   return (
-    <Dialog open={preventClose} onOpenChange={setPreventClose}>
+    <Dialog>
       <DialogTrigger>
         <Button>Tipping</Button>
       </DialogTrigger>
@@ -40,7 +40,7 @@ export const TippingModal = () => {
         </DialogHeader>
         <div>
           <legend>Select Tipping Percentage</legend>
-          {preventClose ? (
+          {!preventClose ? (
             <RadioGroup defaultValue={tipPercentage} onValueChange={e => setTipPercentage(e)}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="200" id="r1" />
@@ -77,7 +77,7 @@ export const TippingModal = () => {
           </Select>
         </div>
         <TippingButton />
-        <Button onClick={handleSubmit}>Cancel</Button>
+        {preventClose && <Button onClick={handleSubmit}>Cancel</Button>}
       </DialogContent>
     </Dialog>
   );

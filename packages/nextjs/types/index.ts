@@ -7,7 +7,6 @@ export type createUser = {
   stakingAmount: number;
 };
 
-
 export type buttonConfig = {
   taskId: number;
   contractAddress: string;

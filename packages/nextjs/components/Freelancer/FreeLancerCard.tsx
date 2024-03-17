@@ -79,6 +79,18 @@ export const FreeLancerCard = ({
     checkUserRecord();
   }, [data.owner]);
 
+  const roundMath = (value: string, decimals: number) => {
+    const valueNum = Number(value);
+    if (valueNum === 0) return 0;
+    return Number(Math.round(Number(valueNum + "e" + decimals)) + "e-" + decimals);
+  };
+
+  const getUsdPrice = (price: string) => {
+    if (price === "") return 0;
+    const priceUsd = 3600 * Number(price);
+    const roundPrice = roundMath(priceUsd.toString(), 5);
+    return roundPrice;
+  };
   return (
     <Card className="mb-4 p-2">
       <CardHeader>
@@ -90,7 +102,10 @@ export const FreeLancerCard = ({
               </div>
               {isVerfied && <Badge className="bg-primary">Verified</Badge>}
             </div>
-            <AskJob contractAddress={data.stakingContractAddress} tokenAddress={tokenAddress || ""} />
+            <div className="space-x-3">
+              <TippingModal />
+              <AskJob contractAddress={data.stakingContractAddress} tokenAddress={tokenAddress || ""} />
+            </div>
           </div>
         </CardTitle>
         <CardDescription>
@@ -107,8 +122,8 @@ export const FreeLancerCard = ({
       </CardContent>
       <CardFooter className="flex justify-between border-t-2 py-3 px-4">
         <div>
-          <div className="text-lg">$0.002</div>
-          <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
+          <div className="text-lg">${getUsdPrice(sharePrice ?? "")}</div>
+          <div className="text-sm text-gray-400">{roundMath(sharePrice ?? "", 5)} ETH / Share</div>
         </div>
         <div className="flex flex-row space-x-3">
           <div className="flex flex-col justify-between">

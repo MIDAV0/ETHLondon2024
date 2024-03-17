@@ -4,7 +4,15 @@ import { useContractWrite } from "wagmi";
 import { Button } from "~~/components/ui/button";
 import { STAKING_CONTRACT_ABI } from "~~/contracts/StakingContract";
 
-export const BuyButton = ({ contractAddress, shares, price }: { contractAddress: string, shares: bigint, price: bigint }) => {
+export const BuyButton = ({
+  contractAddress,
+  shares,
+  price,
+}: {
+  contractAddress: string;
+  shares: bigint;
+  price: bigint;
+}) => {
   const {
     write: buy,
     isError,
@@ -20,7 +28,7 @@ export const BuyButton = ({ contractAddress, shares, price }: { contractAddress:
     toast.error("Error buying shares");
   }
 
-  if (isSuccess) {
+  if (isSuccess && !isLoading) {
     toast.success("Shares brought successfully");
   }
 

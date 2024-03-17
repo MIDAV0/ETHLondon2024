@@ -20,6 +20,7 @@ export const AskJob = ({ contractAddress, tokenAddress }: { contractAddress: str
     // data: writeData,
     // isLoading: isWriteLoading,
     // isSuccess: isWriteSuccess,
+    isError: isWriteError,
     write: writeCreateTask,
   } = useContractWrite({
     address: contractAddress,
@@ -74,6 +75,7 @@ export const AskJob = ({ contractAddress, tokenAddress }: { contractAddress: str
   const onSubmit = () => {
     writeCreateTask({
       args: [jobDuration * 3600, parseEther(jobDuration.toString()), jobTitle, jobDescription],
+      value: getPriceData,
     });
   };
 

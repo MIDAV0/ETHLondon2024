@@ -28,7 +28,7 @@ export const SellButton = ({
     toast.error("Error selling shares");
   }
 
-  if (isSuccess) {
+  if (isSuccess && !isLoading) {
     toast.success("Shares sold successfully");
   }
 
