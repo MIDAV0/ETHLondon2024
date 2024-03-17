@@ -14,24 +14,7 @@ const WorldCoinProof = ({ userAddress }: { userAddress: string }) => {
   const onSuccess = async (result: ISuccessResult) => {
     // This is where you should perform frontend actions once a user has been verified, such as redirecting to a new page
     console.log("Successfully verified with World ID! Your nullifier hash is: " + result.nullifier_hash);
-    console.log(userAddress)
-    await fetch("/api/create-user-record", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nullifier_hash: result.nullifier_hash,
-        address: userAddress,
-      }),
-    }).then(res => {
-      console.log(res);
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      console.log("User added to database");
-      return res.json();
-    });
+    console.log(userAddress);
   };
 
   const handleProof = async (result: ISuccessResult) => {

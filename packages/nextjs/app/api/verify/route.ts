@@ -1,12 +1,6 @@
 import { NextResponse } from "next/server";
 
-// import https from 'https';
-
-export const config = {
-  api: {
-    externalResolver: true,
-  },
-};
+// import https from 'https'
 
 export type VerifyReply = {
   code: string;
