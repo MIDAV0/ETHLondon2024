@@ -12,7 +12,7 @@ const targetNetworks = getTargetNetworks();
 // We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.
 const enabledChains = targetNetworks.find(network => network.id === 1)
   ? targetNetworks
-  : [...targetNetworks, chains.mainnet, chains.baseSepolia];
+  : [...targetNetworks, chains.mainnet, chains.baseSepolia, chains.celoAlfajores, chains.arbitrumSepolia];
 
 /**
  * Chains for the app

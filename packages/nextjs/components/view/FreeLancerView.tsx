@@ -4,9 +4,12 @@ import React from "react";
 import { useFreelancerFactory } from "../../hooks/useFreelancerFactory";
 import { FreeLancerCard } from "~~/components/Freelancer/FreeLancerCard";
 import { FreeLancerHeader } from "~~/components/Freelancer/FreeLancerHeader";
+import { useNetwork } from "wagmi";
 
 export const FreeLancerView = () => {
-  const { freelancersData } = useFreelancerFactory();
+  const { chain } = useNetwork();
+  if (!chain) return null;
+  const { freelancersData } = useFreelancerFactory(chain?.id);
 
   console.log(freelancersData);
   return (
