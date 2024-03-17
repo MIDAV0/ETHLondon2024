@@ -8,8 +8,7 @@ import { useNetwork } from "wagmi";
 
 export const FreeLancerView = () => {
   const { chain } = useNetwork();
-  if (!chain) return null;
-  const { freelancersData } = useFreelancerFactory(chain?.id);
+  const { freelancersData } = useFreelancerFactory(chain?.id || 84532);
 
   return (
     <div className="w-[70%] mx-auto p-2">
