@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useContractWrite } from "wagmi";
 import APEToken from "~~/contracts/APEToken.json";
 
-export const TippingButton = ({ contractAddress }: { contractAddress: string }) => {
+export const TippingButton = ({ contractAddress, tippingPercent }: { contractAddress: string, tippingPercent: string }) => {
   const {
     write: tip,
     isError,
@@ -21,7 +21,9 @@ export const TippingButton = ({ contractAddress }: { contractAddress: string }) 
   }
 
   const handleTip = () => {
-    tip({ args: [contractAddress, BigInt(100)] });
+    const newValue = (Number(tippingPercent) * 50) / 100;
+    console.log(newValue)
+    tip({ args: [contractAddress, BigInt(50 * 10 ** 18)] });
   };
 
   return <Button onClick={handleTip}>Tipping</Button>;

@@ -76,7 +76,7 @@ export const TippingModal = ({ contractAddress }: { contractAddress: string }) =
             </SelectContent>
           </Select>
         </div>
-        <TippingButton contractAddress={contractAddress} />
+        <TippingButton tippingPercent={tipPercentage} contractAddress={contractAddress} />
         {preventClose && <Button onClick={handleSubmit}>Cancel</Button>}
       </DialogContent>
     </Dialog>
