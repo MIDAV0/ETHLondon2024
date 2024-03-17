@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { IDKitWidget, VerificationLevel } from "@worldcoin/idkit";
 import type { ISuccessResult } from "@worldcoin/idkit";
-import type { VerifyReply } from "~~/app/api/verify";
+import type { VerifyReply } from "~~/app/api/verify/route";
 
 const WorldCoinProof = ({ userAddress }: { userAddress: string }) => {
   if (!process.env.NEXT_PUBLIC_WLD_APP_ID) {
@@ -11,9 +11,27 @@ const WorldCoinProof = ({ userAddress }: { userAddress: string }) => {
     throw new Error("app_id is not set in environment variables!");
   }
 
-  const onSuccess = (result: ISuccessResult) => {
+  const onSuccess = async (result: ISuccessResult) => {
     // This is where you should perform frontend actions once a user has been verified, such as redirecting to a new page
-    window.alert("Successfully verified with World ID! Your nullifier hash is: " + result.nullifier_hash);
+    console.log("Successfully verified with World ID! Your nullifier hash is: " + result.nullifier_hash);
+    console.log(userAddress)
+    await fetch("/api/create-user-record", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nullifier_hash: result.nullifier_hash,
+        address: userAddress,
+      }),
+    }).then(res => {
+      console.log(res);
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      console.log("User added to database");
+      return res.json();
+    });
   };
 
   const handleProof = async (result: ISuccessResult) => {
@@ -37,22 +55,7 @@ const WorldCoinProof = ({ userAddress }: { userAddress: string }) => {
     const data: VerifyReply = await res.json();
     if (res.status == 200) {
       console.log("Successful response from backend:\n", data); // Log the response from our backend for visibility
-      await fetch("/api/add-user-wld", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nullifier_hash: result.nullifier_hash,
-          address: userAddress,
-        }),
-      }).then(res => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        console.log("Successful response from backend:\n", data);
-        return res.json();
-      });
+
     } else {
       throw new Error(`Error code ${res.status} (${data.code}): ${data.detail}` ?? "Unknown error."); // Throw an error if verification fails
     }
