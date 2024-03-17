@@ -1,4 +1,5 @@
 import { usePathname } from "next/navigation";
+import { NounsAvatar } from "../Avatars/NounsAvatar";
 import { SlashFreelancer } from "../Freelancer/SlashFreelancer";
 import WorldCoinProof from "../WorldCoinProof";
 import { CalendarComponent } from "./CalendarComponent";
@@ -73,17 +74,24 @@ export const MainPage = () => {
   };
 
   return (
-    <Tabs defaultValue="viewPage" className="w-full">
+    <Tabs defaultValue={contractAddress === address ? "accountPage" : "viewPage"} className="w-full">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="accountPage" disabled={contractAddress !== address}>
           Freelancer Account
         </TabsTrigger>
-        <TabsTrigger value="viewPage">Freelancer Page</TabsTrigger>
+        <TabsTrigger value="viewPage" disabled={contractAddress === address}>
+          Freelancer Page
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="accountPage">
         <div className="p-2">
           <CardHeader>
-            <CardTitle>{freelancerInfo?.[1]} Account</CardTitle>
+            <CardTitle>
+              <div className="flex flex-row items-center space-x-5">
+                <p>{freelancerInfo?.[1]} Account</p>
+                <NounsAvatar />
+              </div>
+            </CardTitle>
             <CardDescription>{freelancerInfo?.[2]}</CardDescription>
           </CardHeader>
           <div className="flex flex-row">
@@ -92,7 +100,7 @@ export const MainPage = () => {
               <div className="w-[742px] border border-black rounded-lg p-5 self-center">
                 <Label className="text-lg font-semibold mx-auto">Share Price</Label>
                 <div className="text-lg">{sharePrice} ETH</div>
-                <div className="text-lg">{Number(sharePrice)*3500} USD</div>
+                <div className="text-lg">{Number(sharePrice) * 3500} USD</div>
               </div>
             </div>
             <div className="flex flex-col mx-auto space-y-4">
@@ -119,8 +127,13 @@ export const MainPage = () => {
                 </CardHeader>
                 <CardFooter className="flex justify-between border-t-2 py-3 px-4">
                   <div>
-                    <div className="text-lg">{formatUnits(task?.[3], 18)} Shares = 15 $</div>
-                    <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
+                    <div className="text-lg">
+                      {formatUnits(task?.[3], 18)} Shares ={" "}
+                      {Math.round(3500 * Number(sharePrice) * Number(formatUnits(task?.[3], 18)) * 100) / 100} $
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {sharePrice ? Math.round(Number(sharePrice) * 100000) / 100000 : 0} ETH / Share
+                    </div>
                   </div>
                   {address && (
                     <div className="flex gap-x-2">
@@ -141,7 +154,12 @@ export const MainPage = () => {
       <TabsContent value="viewPage" className="p-2">
         <Card className="p-2">
           <CardHeader>
-            <CardTitle>{freelancerInfo?.[1]} Account</CardTitle>
+            <CardTitle>
+              <div className="flex flex-row items-center space-x-5">
+                <p>{freelancerInfo?.[1]} Account</p>
+                <NounsAvatar />
+              </div>
+            </CardTitle>
             <CardDescription>{freelancerInfo?.[2]}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -168,8 +186,13 @@ export const MainPage = () => {
                       </CardHeader>
                       <CardFooter className="flex justify-between border-t-2 py-3 px-4">
                         <div>
-                          <div className="text-lg">{formatUnits(task?.[3], 18)} Shares = 15 $</div>
-                          <div className="text-sm text-gray-400">{sharePrice} ETH / Share</div>
+                          <div className="text-lg">
+                            {formatUnits(task?.[3], 18)} Shares ={" "}
+                            {Math.round(3500 * Number(sharePrice) * Number(formatUnits(task?.[3], 18)) * 100) / 100} $
+                          </div>{" "}
+                          <div className="text-sm text-gray-400">
+                            {sharePrice ? Math.round(Number(sharePrice) * 100000) / 100000 : 0} ETH / Share
+                          </div>{" "}
                         </div>
                         {task?.[6] === address && (
                           <div className="flex gap-x-2">
