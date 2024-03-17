@@ -5,12 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { parse } from "path";
 import { useForm } from "react-hook-form";
 import { parseEther } from "viem/utils";
-import { useAccount, useContractWrite } from "wagmi";
+import { useAccount, useContractWrite, useNetwork } from "wagmi";
 import { z } from "zod";
 import { Button } from "~~/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~~/components/ui/form";
 import { Input } from "~~/components/ui/input";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
+import chainSmart from "~~/utils/chainSmart";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -37,6 +38,7 @@ export function ProfileForm() {
   const [tokenShares, setTokenShares] = useState(24);
   const [stakesAmount, setStakesAmount] = useState(0);
   const { address } = useAccount();
+  const { chain } = useNetwork();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,8 +51,10 @@ export function ProfileForm() {
       stakesAmount: "",
     },
   });
+  const smartContract = chainSmart(chain?.id || 84532);
+
   const { data, isLoading, isSuccess, write } = useContractWrite({
-    address: "0xfbeD2EF163dAC5EEbee187051E352Bbee135c8C2",
+    address: smartContract,
     abi: CONTRACT_FACTORY_ABI,
     functionName: "createContract",
   });

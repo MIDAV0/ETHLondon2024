@@ -4,7 +4,7 @@ import { SlashFreelancer } from "../Freelancer/SlashFreelancer";
 import WorldCoinProof from "../WorldCoinProof";
 import { CalendarComponent } from "./CalendarComponent";
 import { formatUnits } from "viem";
-import { useAccount, useContractRead } from "wagmi";
+import { useAccount, useContractRead, useNetwork } from "wagmi";
 import { CancelTask } from "~~/components/Freelancer/CancelTask";
 import { ConfirmCompletion } from "~~/components/Freelancer/ConfirmComplete";
 import { ConfirmDelivery } from "~~/components/Freelancer/ConfirmDelivery";
@@ -14,14 +14,18 @@ import { Label } from "~~/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
 import { CONTRACT_FACTORY_ABI } from "~~/contracts/ContractFactory";
 import { useStakingContract } from "~~/hooks/useStakingContract";
+import chainSmart from "~~/utils/chainSmart";
 
 export const MainPage = () => {
   const pathname = usePathname();
   const contractAddress = pathname.slice(16);
   const { address } = useAccount();
+  const { chain } = useNetwork();
+
+  const smartContract = chainSmart(chain?.id || 84532);
 
   const { data: freelancerInfo } = useContractRead({
-    address: "0xfbeD2EF163dAC5EEbee187051E352Bbee135c8C2",
+    address: smartContract,
     abi: CONTRACT_FACTORY_ABI,
     functionName: "freelancerInfoMapping",
     args: [contractAddress],
