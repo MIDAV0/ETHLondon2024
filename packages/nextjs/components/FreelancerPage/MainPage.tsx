@@ -3,6 +3,7 @@ import { NounsAvatar } from "../Avatars/NounsAvatar";
 import { SlashFreelancer } from "../Freelancer/SlashFreelancer";
 import WorldCoinProof from "../WorldCoinProof";
 import { CalendarComponent } from "./CalendarComponent";
+import LineGraph from "./LineGraph";
 import { formatUnits } from "viem";
 import { useAccount, useContractRead, useNetwork } from "wagmi";
 import { CancelTask } from "~~/components/Freelancer/CancelTask";
@@ -216,11 +217,12 @@ export const MainPage = () => {
                   ))}
                 </div>
               )}
-              <div>
+              <div className="flex flex-row justify-between space-x-4">
                 <div className="flex flex-col mx-auto space-y-4">
                   <p className="text-lg font-bold text-center">Check Freelancer schedule</p>
                   <CalendarComponent />
                 </div>
+                <LineGraph />
               </div>
             </div>
           </CardContent>
