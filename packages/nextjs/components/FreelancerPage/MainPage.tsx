@@ -120,7 +120,7 @@ export const MainPage = () => {
             <CardTitle>Freelancer Name Account</CardTitle>
             <CardDescription>View your tasks here</CardDescription>
           </CardHeader>
-          <div className="p-6">{address && <WorldCoinProof userAddress={address} />}</div>
+          <div className="p-6">{contractAddress === address && <WorldCoinProof userAddress={address} />}</div>
           <div className="grid grid-cols-2 gap-4 p-4">
             {tasksData?.map((task: any, index: number) => (
               <Card key={index} className="p-2">
